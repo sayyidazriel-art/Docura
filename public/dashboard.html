@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Docura — Demo Dashboard</title>
+
+  <link rel="stylesheet" href="/dashboard.css">
+</head>
+
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Docura</div>
+        <div class="brand-caption">Credential &amp; Risk Audit</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Workspace</div>
+
+    <button class="nav-item active" data-page="dashboard">
+      <span class="nav-icon">▦</span>
+      Dashboard
+    </button>
+
+    <button class="nav-item" data-page="citizens">
+      <span class="nav-icon">♙</span>
+      Data Warga
+    </button>
+
+    <button class="nav-item" data-page="documents">
+      <span class="nav-icon">▤</span>
+      Dokumen
+    </button>
+
+    <div class="nav-label">Operations</div>
+
+    <button class="nav-item" data-page="verification">
+      <span class="nav-icon">✓</span>
+      Verifikasi Identitas
+    </button>
+
+    <button class="nav-item" data-page="audit">
+      <span class="nav-icon">◷</span>
+      Audit Log
+    </button>
+
+    <div class="sidebar-bottom">
+      <div class="system-card">
+        <div class="system-status">
+          <span class="status-dot"></span>
+          Demo Environment
+        </div>
+
+        <div class="system-caption">
+          Data sintetis untuk demonstrasi Docura.
+          Belum terhubung ke proses operasional nyata.
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+          aria-label="Buka navigasi"
+        >☰</button>
+
+        <div class="breadcrumb">
+          Docura <span> / </span>
+          <strong id="breadcrumbTitle">Dashboard</strong>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <span class="demo-badge">DEMO MODE</span>
+
+        <div class="theme-switcher" role="group" aria-label="Pilih tema tampilan">
+          <button class="theme-choice" type="button" data-theme-choice="light" aria-pressed="true" aria-label="Gunakan tema terang" title="Light Mode">☀ <span class="theme-label">Terang</span></button>
+          <button class="theme-choice" type="button" data-theme-choice="dark" aria-pressed="false" aria-label="Gunakan tema gelap" title="Dark Mode">☾ <span class="theme-label">Gelap</span></button>
+        </div>
+
+        <div class="user-profile">
+          <div class="avatar">AD</div>
+          <div class="user-details">
+            <div class="user-name">Administrator</div>
+            <div class="user-role">Demo Account</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <!-- EMERGENCY MODE -->
+
+      <div class="emergency-banner" id="emergencyBanner">
+        <div>
+          <div class="emergency-title" id="emergencyTitle">
+            ⚠ Emergency Mode
+          </div>
+
+          <div class="emergency-description" id="emergencyDescription">
+            Mode darurat belum diaktifkan. Aktifkan untuk demonstrasi
+            alur prioritas pemulihan data.
+          </div>
+        </div>
+
+        <button
+          class="button"
+          id="emergencyToggle"
+          type="button"
+        >
+          Aktifkan Mode
+        </button>
+      </div>
+
+      <!-- DYNAMIC PAGE CONTENT -->
+
+      <div id="pageContent"></div>
+
+      <footer class="page-footer">
+        Docura · Decentralized Object Credential Unification &amp; Risk Audit
+        <br>
+        Prototype demonstrasi — bukan sistem administrasi pemerintah.
+      </footer>
+
+    </section>
+  </main>
+</div>
+
+<!-- REGISTRATION MODAL -->
+
+<div class="modal-backdrop" id="registrationModal">
+  <div class="modal">
+
+    <div class="modal-heading">
+      <div>
+        <h2>Registrasi Warga</h2>
+        <div class="card-subtitle">
+          Masukkan data sintetis untuk demonstrasi.
+        </div>
+      </div>
+
+      <button
+        class="close-button"
+        id="closeModal"
+        aria-label="Tutup"
+      >×</button>
+    </div>
+
+    <form id="registrationForm">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label" for="fullName">
+            Nama Lengkap *
+          </label>
+
+          <input
+            class="form-control"
+            id="fullName"
+            name="fullName"
+            required
+            maxlength="150"
+            placeholder="Contoh: Budi Santoso"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="birthDate">
+            Tanggal Lahir
+          </label>
+
+          <input
+            class="form-control"
+            id="birthDate"
+            name="birthDate"
+            type="date"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="gender">
+            Jenis Kelamin
+          </label>
+
+          <select
+            class="form-control"
+            id="gender"
+            name="gender"
+          >
+            <option value="">Pilih</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+            <option value="Tidak disebutkan">Tidak disebutkan</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">
+            Lokasi Bencana *
+          </label>
+
+          <input
+            class="form-control"
+            id="location"
+            name="location"
+            required
+            maxlength="150"
+            placeholder="Contoh: Desa Sukamaju"
+          >
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label" for="address">
+            Alamat
+          </label>
+
+          <textarea
+            class="form-control"
+            id="address"
+            name="address"
+            maxlength="1000"
+            placeholder="Alamat contoh untuk data demonstrasi"
+          ></textarea>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button
+          class="button"
+          id="cancelRegistration"
+          type="button"
+        >
+          Batal
+        </button>
+
+        <button class="button button-primary" type="submit">
+          Simpan Data Demo
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/dashboard.js" defer></script>
+</body>
+</html>

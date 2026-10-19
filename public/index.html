@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102544">
+  <meta name="description" content="Docura (Decentralized Object Credential Unification &amp; Risk Audit) membantu pengelolaan kredensial, pemulihan dokumen, dan audit risiko.">
+  <title>Docura — Decentralized Object Credential Unification &amp; Risk Audit</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/landing.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#konten">Lewati ke konten</a>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#beranda" aria-label="Docura, beranda">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M8 4.75h10l6 6V27H8V4.75Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M18 5v6h6M12 16h8M12 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4 10 3-3m-3 3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-copy"><strong>Docura</strong><small>Credential &amp; Risk Audit</small></span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navigasi utama">
+        <a href="#cara-kerja">Cara Kerja</a>
+        <a href="#fitur">Fitur</a>
+        <a href="#keamanan">Keamanan</a>
+        <div class="theme-control" aria-label="Pilihan tema">
+          <button class="theme-button" type="button" data-theme-choice="light" aria-label="Gunakan tema terang" title="Tema terang">☀</button>
+          <button class="theme-button" type="button" data-theme-choice="dark" aria-label="Gunakan tema gelap" title="Tema gelap">☾</button>
+        </div>
+        <div class="nav-actions">
+          <button class="button button-quiet" type="button" data-portal="warga">Masuk Warga</button>
+          <button class="button button-primary button-small" type="button" data-portal="petugas">Portal Petugas <span aria-hidden="true">↗</span></button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="konten">
+    <section class="hero section" id="beranda">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Persiapan dokumen untuk keadaan darurat</div>
+          <h1>Dokumen penting tetap terlindungi, <span>bahkan setelah bencana.</span></h1>
+          <p class="hero-description">Decentralized Object Credential Unification &amp; Risk Audit. Simpan salinan digital dokumen penting dan dukung proses pemulihan yang terkontrol setelah bencana.</p>
+          <div class="hero-actions">
+            <button class="button button-primary button-large" type="button" data-portal="warga">Mulai sebagai Warga <span aria-hidden="true">→</span></button>
+            <a class="button button-outline button-large" href="#cara-kerja">Pelajari cara kerja</a>
+          </div>
+          <div class="hero-assurance">
+            <span class="assurance-icon" aria-hidden="true">✓</span>
+            <span>Akses berbasis kewenangan <i>·</i> Aktivitas penting tercatat</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Ilustrasi dokumen digital yang terlindungi" role="img">
+          <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+          <div class="visual-glow"></div>
+          <div class="document-card document-back"><span class="doc-mini-icon">▤</span><span class="skeleton skeleton-long"></span><span class="skeleton skeleton-medium"></span><span class="skeleton skeleton-short"></span></div>
+          <div class="document-card document-front">
+            <div class="document-top"><span class="doc-type">DOKUMEN DIGITAL</span><span class="doc-menu">•••</span></div>
+            <div class="document-emblem"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M13 5h15l9 9v29H13V5Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M28 5v10h9M19 23h12M19 29h12M19 35h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+            <div class="doc-title-line"></div><div class="doc-line"></div><div class="doc-line doc-line-short"></div>
+            <div class="document-status"><span class="status-check">✓</span><span><strong>Salinan tersimpan</strong><small>Contoh tampilan · data demo</small></span></div>
+          </div>
+          <div class="security-float"><span class="security-shield">✓</span><span><strong>Akses terjaga</strong><small>Berbasis kewenangan</small></span></div>
+          <div class="recovery-float"><span class="recovery-icon">↻</span><span><strong>Siap dipulihkan</strong><small>Melalui petugas berwenang</small></span></div>
+          <div class="visual-caption">Ilustrasi konsep Docura</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Prinsip layanan">
+      <div class="container trust-grid">
+        <div><span class="trust-icon">▤</span><span><strong>Dokumen digital</strong><small>Lebih siap menghadapi risiko</small></span></div>
+        <div><span class="trust-icon">⌕</span><span><strong>Proses terarah</strong><small>Alur pemulihan yang jelas</small></span></div>
+        <div><span class="trust-icon">◈</span><span><strong>Akses terkendali</strong><small>Sesuai peran dan izin</small></span></div>
+        <div><span class="trust-icon">◷</span><span><strong>Jejak aktivitas</strong><small>Aktivitas penting tercatat</small></span></div>
+      </div>
+    </section>
+
+    <section class="section features-section" id="fitur">
+      <div class="container">
+        <div class="section-heading centered">
+          <span class="section-kicker">SATU TUJUAN, DUA TAHAP PENTING</span>
+          <h2>Persiapkan sebelum bencana.<br><span>Pulihkan saat dibutuhkan.</span></h2>
+          <p>Docura dirancang untuk mendukung penyimpanan salinan digital dan proses pemulihan dokumen dengan alur yang terkontrol.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon icon-blue"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3.5h8l4 4V21H6V3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5v4h4M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <span class="feature-number">01 / SIMPAN</span><h3>Penyimpanan dokumen digital</h3><p>Warga dapat menyiapkan salinan dokumen penting agar informasi dokumen yang tersimpan dapat ditinjau kembali sesuai aturan akses.</p><a href="#cara-kerja" class="text-link">Pelajari alurnya <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="feature-card feature-card-highlight">
+            <div class="feature-icon icon-teal"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-3 7.7-7 10-4-2.3-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="feature-number">02 / PULIHKAN</span><h3>Pemulihan pascabencana</h3><p>Petugas berwenang menelusuri akun, memeriksa identitas, meninjau dokumen yang tersedia, lalu memproses permintaan pemulihan.</p><a href="#cara-kerja" class="text-link">Lihat proses pemulihan <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon icon-violet"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="feature-number">03 / KENDALIKAN</span><h3>Verifikasi dan akuntabilitas</h3><p>Akses dibatasi berdasarkan kewenangan. Aktivitas penting dicatat untuk mendukung penelusuran proses dan pengawasan.</p><a href="#keamanan" class="text-link">Tentang keamanan <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process-section" id="cara-kerja">
+      <div class="container process-grid">
+        <div class="process-intro">
+          <span class="section-kicker">CARA KERJA</span>
+          <h2>Alur yang jelas, dari persiapan hingga pemulihan.</h2>
+          <p>Dokumen hanya dapat diproses sesuai akses yang diberikan dan setelah pemeriksaan yang diperlukan dilakukan.</p>
+          <button class="button button-primary" type="button" data-portal="warga">Mulai dari Portal Warga <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="process-list">
+          <article class="process-step"><span class="step-number">01</span><div><h3>Buat dan aktifkan akun</h3><p>Warga mendaftar dan mengaktifkan akun melalui email.</p></div><span class="step-marker">✓</span></article>
+          <article class="process-step"><span class="step-number">02</span><div><h3>Simpan dokumen penting</h3><p>Unggah salinan dokumen dan ikuti verifikasi akses yang disediakan.</p></div><span class="step-marker">✓</span></article>
+          <article class="process-step"><span class="step-number">03</span><div><h3>Datangi layanan pemulihan</h3><p>Jika dokumen fisik hilang atau rusak akibat bencana, warga menghubungi pusat pemulihan yang berwenang.</p></div><span class="step-marker">✓</span></article>
+          <article class="process-step"><span class="step-number">04</span><div><h3>Petugas memverifikasi dan memproses</h3><p>Petugas memeriksa identitas dan kelayakan sebelum dokumen yang tersedia diproses.</p></div><span class="step-marker">✓</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section security-section" id="keamanan">
+      <div class="container security-panel">
+        <div class="security-graphic" aria-hidden="true"><div class="security-ring ring-a"></div><div class="security-ring ring-b"></div><div class="big-shield"><svg viewBox="0 0 80 88" fill="none"><path d="M40 5 68 16v22c0 19-12 32-28 43C24 70 12 57 12 38V16L40 5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="m27 42 9 9 18-20" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        <div class="security-copy"><span class="section-kicker">KEAMANAN & AKUNTABILITAS</span><h2>Data pribadi perlu dilindungi di setiap langkah.</h2><p>Docura dirancang dengan prinsip akses berbasis peran, pemeriksaan pada proses sensitif, dan pencatatan aktivitas penting.</p><ul class="security-list"><li><span>✓</span> Petugas hanya melihat fitur sesuai izin akunnya.</li><li><span>✓</span> Permintaan pemulihan memerlukan pemeriksaan identitas.</li><li><span>✓</span> Aktivitas penting dapat ditelusuri melalui log.</li></ul><p class="security-note">Simulasi biometrik pada versi demonstrasi bukan autentikasi biometrik nyata. Sistem ini juga tidak otomatis menggantikan dokumen resmi yang diterbitkan instansi berwenang.</p></div>
+      </div>
+    </section>
+
+    <section class="closing-section">
+      <div class="container closing-inner"><div><span class="section-kicker">MULAI DARI PERSIAPAN</span><h2>Jaga salinan digital dokumen penting Anda.</h2><p>Persiapan sederhana hari ini dapat membantu proses pemulihan ketika keadaan darurat terjadi.</p></div><button class="button button-light button-large" type="button" data-portal="warga">Masuk ke Portal Warga <span aria-hidden="true">→</span></button></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main"><a class="brand footer-brand" href="#beranda"><span class="brand-mark" aria-hidden="true">D</span><span class="brand-copy"><strong>Docura</strong><small>Decentralized Object Credential Unification &amp; Risk Audit</small></span></a><p>Sistem pendukung penyimpanan, pemulihan kredensial, dan audit risiko dokumen digital.</p><div class="footer-links"><a href="#cara-kerja">Cara Kerja</a><a href="#fitur">Fitur</a><a href="#keamanan">Keamanan</a></div></div>
+    <div class="container footer-bottom"><span>© <span id="currentYear"></span> Docura</span><span>Prototipe demonstrasi — bukan layanan darurat resmi.</span></div>
+  </footer>
+
+  <div class="notice" id="portalNotice" role="status" aria-live="polite" hidden>
+    <div class="notice-icon" aria-hidden="true">i</div><div class="notice-copy"><strong id="noticeTitle">Portal dalam persiapan</strong><p id="noticeMessage">Halaman portal akan dibuat pada tahap implementasi berikutnya.</p></div><button class="notice-close" id="noticeClose" type="button" aria-label="Tutup pemberitahuan">×</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102544"><title>Portal Warga — Docura</title><link rel="stylesheet" href="/auth.css"><script src="/citizen.js" defer></script></head><body class="citizen-page"><header class="portal-header"><a class="brand" href="/"><span class="brand-mark brand-mark-on-light">D</span><span class="brand-copy"><strong>Docura</strong><small>Portal Warga</small></span></a><div class="portal-actions"><div class="theme-control" aria-label="Pilihan tema"><button class="theme-button" type="button" data-theme-choice="light" aria-label="Tema terang" aria-pressed="true">☀</button><button class="theme-button" type="button" data-theme-choice="dark" aria-label="Tema gelap" aria-pressed="false">☾</button></div><button class="button-secondary" id="logoutButton" type="button">Keluar</button></div></header><main class="portal-content"><div id="pageMessage" class="form-message show success" role="status" aria-live="polite">Memeriksa sesi akun…</div><section class="welcome-panel"><div><span class="aside-kicker">DASHBOARD WARGA</span><h1>Halo, <span id="citizenName">Warga</span> 👋</h1><p>Simpan salinan digital dokumen penting Anda secara privat untuk membantu proses pemulihan setelah bencana.</p></div><div class="citizen-code"><small>KODE AKUN DEMONSTRASI</small><strong id="citizenCode">RL-WRG-────────</strong></div></section><section class="dashboard-grid" aria-label="Ringkasan portal warga"><article class="dash-card"><span class="dash-icon">▤</span><h2>Dokumen Saya</h2><p>Kelola salinan digital yang Anda unggah ke penyimpanan privat.</p><span class="status-pill" id="documentCount">Memuat dokumen…</span></article><article class="dash-card"><span class="dash-icon">◈</span><h2>Keamanan Akun</h2><p>Status email akun Anda.</p><span class="status-pill" id="emailStatus">Memeriksa…</span></article><article class="dash-card"><span class="dash-icon">↻</span><h2>Pemulihan Dokumen</h2><p>Permintaan pemulihan hanya diproses petugas berwenang setelah bencana dan pemeriksaan yang diperlukan.</p><span class="status-pill">Alur petugas</span></article></section><section class="recovery-guide" aria-labelledby="recoveryGuideHeading">
+  <div class="guide-intro"><span class="aside-kicker">PANDUAN PEMULIHAN</span><h2 id="recoveryGuideHeading">Pilih cara pemulihan yang paling sesuai</h2><p>Anda tidak perlu mengirim pengajuan pemulihan kantor dari portal ini. Ikuti panduan di bawah untuk pemulihan mandiri atau mendapatkan bantuan langsung dari petugas.</p></div>
+  <div class="recovery-options">
+    <article class="recovery-option recovery-option-home"><div class="option-icon" aria-hidden="true">⌂</div><span class="option-label">PILIHAN 01</span><h3>Pemulihan mandiri dari rumah</h3><p>Gunakan portal Docura untuk mengelola salinan dokumen digital yang sudah tersimpan. Ikuti langkah verifikasi yang tersedia dan pastikan informasi akun tetap aman.</p><ol><li>Masuk ke akun Docura Anda.</li><li>Buka bagian <strong>Dokumen Saya</strong> dan pilih dokumen yang diperlukan.</li><li>Ikuti simulasi verifikasi yang ditampilkan untuk alur demonstrasi.</li></ol><div class="option-note">Gunakan hanya akun Anda sendiri. Simulasi biometrik pada demo bukan pemeriksaan identitas nyata.</div></article>
+    <article class="recovery-option recovery-option-office"><div class="option-icon" aria-hidden="true">⌖</div><span class="option-label">PILIHAN 02</span><h3>Pemulihan langsung di kantor</h3><p>Jika Anda membutuhkan bantuan petugas, datang langsung ke kantor layanan pemulihan. Petugas akan membuat kasus dan memandu prosesnya.</p><ol><li>Datang langsung ke kantor layanan pemulihan.</li><li>Siapkan informasi akun dan dokumen pendukung yang tersedia.</li><li>Ikuti pemeriksaan petugas dan tunggu keputusan yang berwenang.</li><li>Jika disetujui, ikuti instruksi QR dan pengambilan dokumen dari petugas.</li></ol><div class="option-note">Tidak perlu membuat pengajuan terlebih dahulu dari dashboard warga.</div></article>
+  </div>
+</section>
+
+<section class="documents-panel upload-workspace" aria-labelledby="documentsHeading">
+  <div class="upload-heading"><div><span class="aside-kicker">ARSIP PRIVAT</span><h2 id="documentsHeading">Pusat pengiriman dokumen</h2><p>Tambahkan salinan digital agar dokumen Anda tersimpan rapi dan dapat diakses kembali sesuai alur verifikasi Docura.</p></div><div class="upload-heading-badge"><span>▤</span><strong>Arsip aman</strong><small>PDF · JPG · PNG</small></div></div>
+  <div class="upload-benefits"><div><span>✓</span><p><strong>Privat secara default</strong><small>File disimpan di bucket privat.</small></p></div><div><span>↥</span><p><strong>Mudah dikelola</strong><small>Unggah dan lihat arsip dari satu tempat.</small></p></div><div><span>10 MB</span><p><strong>Batas per file</strong><small>Format PDF, JPG, atau PNG.</small></p></div></div>
+  <form id="uploadForm" class="upload-form upload-form-modern">
+    <div class="upload-fields upload-fields-modern"><label>Nama dokumen<input name="title" required minlength="2" maxlength="120" placeholder="Contoh: Akta kelahiran"></label>
+    <label>Jenis dokumen<select name="documentType"><option>Identitas</option><option>Akta kelahiran</option><option>Pendidikan</option><option>Kesehatan</option><option>Kepemilikan</option><option>Lainnya</option></select></label>
+    <label class="file-field">Pilih file untuk diunggah<div class="upload-dropzone" id="uploadDropzone"><span class="dropzone-icon" aria-hidden="true">↑</span><strong id="uploadFileTitle">Tarik file ke sini atau pilih dari perangkat</strong><span id="uploadFileHint">PDF, JPG, atau PNG · Maksimal 10 MB</span><input id="documentFileInput" name="file" type="file" accept="application/pdf,image/jpeg,image/png" required aria-label="Pilih file dokumen"><span class="dropzone-browse">Pilih file</span></div></label></div>
+    <div id="filePreview" class="file-preview" hidden aria-live="polite"></div>
+    <div class="upload-submit-row"><p>Pastikan file yang dipilih benar dan tidak berisi data yang tidak ingin Anda simpan.</p><button class="auth-submit upload-submit" id="uploadButton" type="submit"><span aria-hidden="true">↥</span> Unggah dokumen</button></div>
+    <div id="uploadMessage" class="form-message" role="status" aria-live="polite"></div>
+  </form>
+  <div class="document-toolbar"><div><h3>Arsip tersimpan</h3><p>Daftar dokumen yang sudah diunggah ke akun Anda.</p></div><button class="button-quiet" id="refreshDocuments" type="button">↻ Muat ulang</button></div>
+  <div id="documentsList" class="documents-list"><p class="muted-text">Memuat daftar dokumen…</p></div>
+</section>
+
+<dialog id="fingerprintDialog" class="fingerprint-dialog" aria-labelledby="fingerprintTitle" aria-describedby="fingerprintDescription">
+  <div class="fingerprint-modal-card">
+    <button type="button" id="closeFingerprintDialog" class="fingerprint-close" aria-label="Tutup verifikasi">×</button>
+    <span class="aside-kicker">SIMULASI BIOMETRIK</span>
+    <h2 id="fingerprintTitle">Verifikasi sidik jari</h2>
+    <p id="fingerprintDescription" class="fingerprint-description">Ini adalah simulasi untuk demonstrasi. Browser tidak membaca sidik jari dan tidak ada sensor yang digunakan.</p>
+
+    <div id="fingerprintVisual" class="fingerprint-visual" data-state="idle" aria-hidden="true">
+      <svg class="fingerprint-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 14C36 14 19 31 19 54M60 25C42 25 30 38 30 56M60 36C48 36 41 45 41 59M60 47C55 47 52 52 52 60M60 14C84 14 101 31 101 54M60 25C78 25 90 38 90 56M60 36C72 36 79 45 79 59M60 47C65 47 68 52 68 60M19 64C19 91 34 105 43 109M30 66C30 85 37 96 48 102M41 68C41 82 46 89 54 94M101 64C101 91 86 105 77 109M90 66C90 85 83 96 72 102M79 68C79 82 74 89 66 94M52 64C52 77 55 84 60 88C65 84 68 77 68 64" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+      <span class="scan-line"></span>
+      <span class="fingerprint-orbit"></span>
+    </div>
+
+    <p id="fingerprintStatus" class="fingerprint-status" role="status" aria-live="polite">Siap memulai simulasi.</p>
+    <div class="fingerprint-progress" role="progressbar" aria-label="Progres simulasi pemindaian" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span id="fingerprintProgressFill"></span>
+    </div>
+    <label class="demo-failure-option"><input type="checkbox" id="simulateFailure"> Uji skenario gagal (demo)</label>
+    <div id="fingerprintMessage" class="form-message" role="status" aria-live="polite"></div>
+    <div class="fingerprint-actions">
+      <button type="button" id="cancelFingerprintButton" class="button-secondary">Batalkan</button>
+      <button type="button" id="startFingerprintButton" class="auth-submit">Mulai Pemindaian</button>
+      <button type="button" id="continueFingerprintButton" class="auth-submit" hidden>Lanjutkan</button>
+      <button type="button" id="retryFingerprintButton" class="button-secondary" hidden>Coba Lagi</button>
+    </div>
+    <p class="fingerprint-footnote">Simulasi ini bukan autentikasi biometrik nyata atau bukti identitas.</p>
+  </div>
+</dialog>
+
+<div class="demo-banner"><strong>Catatan keamanan:</strong> Verifikasi sidik jari pada tahap ini hanya simulasi interaksi, bukan biometrik sungguhan. Jangan gunakan dokumen asli atau data sangat sensitif untuk demonstrasi publik. Tautan file hanya berlaku singkat. Penghapusan menghapus file dari penyimpanan privat dan metadata akun.</div></main></body></html>

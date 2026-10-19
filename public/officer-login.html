@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#102544">
+  <title>Masuk Petugas — Docura</title><link rel="stylesheet" href="/auth.css"><link rel="stylesheet" href="/officer-login.css"><script src="/officer-login.js" defer></script>
+</head>
+<body>
+  <main class="officer-auth-shell">
+    <a class="brand" href="/"><span class="brand-mark">D</span><span class="brand-copy"><strong>Docura</strong><small>Portal Petugas Terotorisasi</small></span></a>
+    <section class="officer-auth-card">
+      <a class="back-link" href="/">← Kembali ke beranda</a>
+      <span class="auth-eyebrow">AKSES TERBATAS</span><h1>Masuk Portal Petugas</h1>
+      <p class="auth-subtitle">Gunakan akun yang dibuat oleh administrator. Pendaftaran petugas tidak tersedia secara publik.</p>
+      <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+      <form id="officerLoginForm" novalidate>
+        <div class="form-field"><label for="email">Email petugas</label><input id="email" name="email" type="email" autocomplete="username" required maxlength="254" placeholder="petugas@organisasi.id"></div>
+        <div class="form-field"><label for="password">Kata sandi</label><input id="password" name="password" type="password" autocomplete="current-password" required maxlength="72" placeholder="Masukkan kata sandi"></div>
+        <button class="auth-submit" id="submitButton" type="submit">Masuk dan verifikasi peran →</button>
+      </form>
+      <div class="role-notice"><strong>Empat jenis peran petugas</strong><ul><li>Petugas Pemulihan</li><li>Pencetak Dokumen</li><li>Pengawas</li></ul><small>Hak akses ditentukan oleh peran di server, bukan pilihan pengguna pada halaman login.</small></div>
+    </section>
+    <p class="footer-note">Prototipe demonstrasi Docura · Jangan gunakan data pribadi nyata.</p>
+  </main>
+</body></html>

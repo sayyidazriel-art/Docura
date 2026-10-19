@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102544">
+  <title>Portal Petugas — Docura</title>
+  <link rel="stylesheet" href="/officer.css">
+  <script src="/officer.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/" aria-label="Docura beranda">
+        <span class="brand-mark">D</span><span><strong>Docura</strong><small>Credential &amp; Risk Audit</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav-item active" data-view="overview"><span>▦</span> Ringkasan</button>
+      <button class="nav-item" data-view="cases"><span>▤</span> Kasus pemulihan <b id="navCaseCount">0</b></button>
+      <button class="nav-item" data-view="workflow"><span>✓</span> Alur verifikasi</button>
+      <div class="side-label">SISTEM</div>
+      <div class="emergency-card">
+        <div class="emergency-top"><span class="pulse"></span><strong>Emergency Mode</strong></div>
+        <p id="emergencyText">Mode darurat belum aktif.</p>
+        <button id="emergencyToggle" class="btn btn-emergency">Aktifkan mode</button>
+      </div>
+      <div class="side-bottom"><span class="demo-dot"></span><div><strong>Lingkungan demo</strong><small>Data sintetis, bukan sistem operasional.</small></div></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="mobileMenu" aria-label="Buka navigasi">☰</button>
+        <div><div class="crumb">Docura <span>/</span> <strong id="crumbTitle">Ringkasan</strong></div><div class="top-subtitle" id="portalSubtitle">Portal petugas Docura</div></div>
+        <div class="top-actions">
+          <span class="demo-pill">DEMO MODE</span>
+          <div class="theme-toggle" role="group" aria-label="Tema"><button data-theme="light" aria-pressed="true" title="Tema terang">☀</button><button data-theme="dark" aria-pressed="false" title="Tema gelap">☾</button></div>
+          <div class="profile"><span class="avatar" id="officerAvatar">PT</span><span><strong id="officerName">Memuat profil…</strong><small id="officerRole">Memverifikasi akses</small></span><button class="small-btn" id="officerLogout" type="button">Keluar</button></div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="notice"><span class="notice-icon">ⓘ</span><p><strong>Mode demonstrasi.</strong> Data kasus tersimpan terpusat di Supabase. Pemindaian wajah adalah simulasi antarmuka dan tidak memverifikasi identitas sungguhan.</p></div>
+        <div id="pageContent" aria-live="polite"></div>
+        <footer>Docura · Decentralized Object Credential Unification &amp; Risk Audit · Prototipe demonstrasi</footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Tutup">×</button>
+      <div id="modalBody"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
