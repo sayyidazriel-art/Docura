@@ -20,6 +20,15 @@
   const cancelFingerprintButton = document.getElementById('cancelFingerprintButton');
   const closeFingerprintDialog = document.getElementById('closeFingerprintDialog');
   const simulateFailure = document.getElementById('simulateFailure');
+  const passkeyStatus = document.getElementById('passkeyStatus');
+  const passkeyMessage = document.getElementById('passkeyMessage');
+  const registerPasskeyButton = document.getElementById('registerPasskeyButton');
+  const passkeyList = document.getElementById('passkeyList');
+  const accountSettingsDialog = document.getElementById('accountSettingsDialog');
+  const settingsMessage = document.getElementById('settingsMessage');
+  const settingsRegisterPasskeyButton = document.getElementById('settingsRegisterPasskeyButton');
+  const fingerprintDescription = document.getElementById('fingerprintDescription');
+  const fingerprintFootnote = document.querySelector('.fingerprint-footnote');
 
   let session = null;
   let pendingAction = null;
@@ -27,6 +36,7 @@
   let progressTimer = null;
   let verificationToken = null;
   let scanInProgress = false;
+  let passkeyEnabled = false;
 
   function applyTheme(theme, persist = true) {
     const safe = theme === 'dark' ? 'dark' : 'light';
@@ -54,6 +64,191 @@
     const data = await response.json().catch(() => ({}));
     if (!response.ok || !data.success) throw new Error(data.message || `Permintaan gagal (${response.status}).`);
     return data;
+  }
+
+
+  function decodeBase64url(value) {
+    const normalized = String(value || '').replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
+    const binary = atob(padded);
+    return Uint8Array.from(binary, character => character.charCodeAt(0));
+  }
+  function encodeBase64url(value) {
+    const bytes = new Uint8Array(value);
+    let binary = '';
+    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  }
+  function prepareCredentialOptions(options, registration = false) {
+    const prepared = { ...options, challenge: decodeBase64url(options.challenge) };
+    if (registration) {
+      prepared.user = { ...options.user, id: decodeBase64url(options.user.id) };
+      prepared.excludeCredentials = (options.excludeCredentials || []).map(item => ({ ...item, id: decodeBase64url(item.id) }));
+    } else {
+      prepared.allowCredentials = (options.allowCredentials || []).map(item => ({ ...item, id: decodeBase64url(item.id) }));
+    }
+    return prepared;
+  }
+  function serializeCredential(credential) {
+    const response = credential.response;
+    const serialized = {
+      id: credential.id,
+      rawId: encodeBase64url(credential.rawId),
+      type: credential.type,
+      response: {
+        clientDataJSON: encodeBase64url(response.clientDataJSON),
+      }
+    };
+    if (response.attestationObject) {
+      serialized.response.attestationObject = encodeBase64url(response.attestationObject);
+      if (typeof response.getTransports === 'function') serialized.response.transports = response.getTransports();
+    }
+    if (response.authenticatorData) serialized.response.authenticatorData = encodeBase64url(response.authenticatorData);
+    if (response.signature) serialized.response.signature = encodeBase64url(response.signature);
+    if (response.userHandle) serialized.response.userHandle = encodeBase64url(response.userHandle);
+    return serialized;
+  }
+  async function loadPasskeyStatus() {
+    try {
+      const data = await api('/api/passkeys/status');
+      passkeyEnabled = Boolean(data.enabled);
+      if (passkeyStatus) { passkeyStatus.textContent = passkeyEnabled ? `Passkey aktif · ${(data.credentials || []).length} kredensial terdaftar` : 'Belum ada passkey terdaftar'; passkeyStatus.className = `status-pill${passkeyEnabled ? ' active' : ''}`; }
+      if (registerPasskeyButton) registerPasskeyButton.textContent = passkeyEnabled ? 'Kelola passkey di Pengaturan' : 'Buka Pengaturan untuk mendaftarkan passkey';
+      if (passkeyList) { passkeyList.innerHTML = (data.credentials || []).map((credential, index) => `<div class="passkey-item"><span><strong>${escapeHtml(credential.deviceLabel || `Passkey ${index + 1}`)}</strong><br><small>Terdaftar ${escapeHtml(credential.createdAt ? new Date(credential.createdAt).toLocaleDateString('id-ID') : '—')}</small><br><small>${escapeHtml(String(credential.id || '').slice(0, 10))}…</small></span><button type="button" data-remove-passkey="${escapeHtml(credential.id)}" aria-label="Hapus ${escapeHtml(credential.deviceLabel || `Passkey ${index + 1}`)}">Hapus</button></div>`).join(''); if (!data.credentials?.length) passkeyList.innerHTML = '<p class="muted-text">Belum ada passkey terdaftar.</p>'; }
+      if (settingsRegisterPasskeyButton) settingsRegisterPasskeyButton.textContent = passkeyEnabled ? '＋ Daftarkan passkey tambahan' : '＋ Daftarkan passkey';
+      if (passkeyEnabled) {
+        fingerprintDescription.textContent = 'Gunakan autentikator passkey perangkat Anda. Jika perangkat menggunakan sidik jari, verifikasi itu tetap dilakukan secara lokal oleh perangkat.';
+        fingerprintFootnote.textContent = 'Docura tidak menerima atau menyimpan gambar sidik jari. Akses sensitif menggunakan bukti WebAuthn yang diverifikasi server.';
+      }
+    } catch (error) {
+      if (passkeyStatus) passkeyStatus.textContent = 'Status passkey belum tersedia';
+      if (passkeyMessage) showMessage(passkeyMessage, `${error.message} Pastikan migrasi V2.2 dan konfigurasi server telah diterapkan.`, 'error');
+    }
+  }
+  registerPasskeyButton?.addEventListener('click', () => { if (accountSettingsDialog && !accountSettingsDialog.open) accountSettingsDialog.showModal(); });
+
+  settingsRegisterPasskeyButton?.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const currentPassword = document.getElementById('settingsPasskeyPassword').value;
+    const deviceLabel = document.getElementById('settingsPasskeyLabel').value.trim() || 'Passkey perangkat';
+    if (!window.PublicKeyCredential || !navigator.credentials?.create) {
+      showMessage(settingsMessage, 'Browser atau perangkat ini tidak mendukung WebAuthn/passkey.', 'error');
+      return;
+    }
+    if (!currentPassword) return showMessage(settingsMessage, 'Masukkan kata sandi akun untuk mendaftarkan passkey.', 'error');
+    settingsRegisterPasskeyButton.disabled = true;
+    clearMessage(settingsMessage);
+    try {
+      const { options } = await api('/api/passkeys/registration/options', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword }) });
+      const credential = await navigator.credentials.create({ publicKey: prepareCredentialOptions(options, true) });
+      if (!credential) throw new Error('Pendaftaran passkey dibatalkan.');
+      const result = await api('/api/passkeys/registration/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ challenge: options.challenge, credential: serializeCredential(credential), deviceLabel }) });
+      showMessage(settingsMessage, result.message, 'success');
+      document.getElementById('settingsPasskeyPassword').value = '';
+      document.getElementById('settingsPasskeyLabel').value = '';
+      await loadPasskeyStatus();
+    } catch (error) {
+      showMessage(settingsMessage, error.message || 'Pendaftaran passkey gagal.', 'error');
+    } finally {
+      settingsRegisterPasskeyButton.disabled = false;
+    }
+  });
+
+  passkeyList?.addEventListener('click', async (event) => {
+    const button = event.target.closest('button[data-remove-passkey]');
+    if (!button) return;
+    const credentialId = button.dataset.removePasskey;
+    if (!window.confirm('Hapus passkey ini dari akun Docura? Ini tidak otomatis menghapus salinannya di Microsoft Password Manager atau perangkat.')) return;
+    const currentPassword = window.prompt('Masukkan kata sandi akun saat ini untuk mengonfirmasi penghapusan passkey:');
+    if (currentPassword === null) return;
+    if (!currentPassword) return showMessage(settingsMessage, 'Kata sandi diperlukan untuk menghapus passkey.', 'error');
+    button.disabled = true;
+    try {
+      const result = await api(`/api/passkeys/${encodeURIComponent(credentialId)}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword }) });
+      showMessage(settingsMessage, result.message, 'success');
+      await loadPasskeyStatus();
+    } catch (error) {
+      showMessage(settingsMessage, error.message, 'error');
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById('openSettingsButton')?.addEventListener('click', () => accountSettingsDialog?.showModal());
+  document.getElementById('closeAccountSettings')?.addEventListener('click', () => accountSettingsDialog?.close());
+  document.getElementById('closeAccountSettingsFooter')?.addEventListener('click', () => accountSettingsDialog?.close());
+  accountSettingsDialog?.addEventListener('click', (event) => { if (event.target === accountSettingsDialog) accountSettingsDialog.close(); });
+
+  document.getElementById('settingsNameForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fullName = form.elements.fullName.value.trim();
+    const currentPassword = form.elements.currentPassword.value;
+    const submit = form.querySelector('button[type=submit]');
+    submit.disabled = true;
+    try {
+      const result = await api('/api/citizen/account/name', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fullName, currentPassword }) });
+      document.getElementById('citizenName').textContent = result.fullName;
+      form.elements.fullName.value = result.fullName;
+      form.elements.currentPassword.value = '';
+      showMessage(settingsMessage, result.message, 'success');
+    } catch (error) { showMessage(settingsMessage, error.message, 'error'); }
+    finally { submit.disabled = false; }
+  });
+
+  document.getElementById('settingsEmailForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('button[type=submit]');
+    submit.disabled = true;
+    try {
+      const result = await api('/api/citizen/account/email', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: form.elements.email.value.trim(), currentPassword: form.elements.currentPassword.value, refreshToken: session?.refresh_token || '' }) });
+      form.elements.currentPassword.value = '';
+      showMessage(settingsMessage, result.message, 'success');
+    } catch (error) { showMessage(settingsMessage, error.message, 'error'); }
+    finally { submit.disabled = false; }
+  });
+
+  document.getElementById('settingsPasswordForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.elements.newPassword.value !== form.elements.confirmPassword.value) return showMessage(settingsMessage, 'Konfirmasi kata sandi baru tidak cocok.', 'error');
+    const submit = form.querySelector('button[type=submit]');
+    submit.disabled = true;
+    try {
+      const result = await api('/api/citizen/account/password', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: form.elements.currentPassword.value, newPassword: form.elements.newPassword.value }) });
+      form.reset();
+      showMessage(settingsMessage, result.message, 'success');
+    } catch (error) { showMessage(settingsMessage, error.message, 'error'); }
+    finally { submit.disabled = false; }
+  });
+  async function runPasskeyAction() {
+    try {
+      if (!window.PublicKeyCredential || !navigator.credentials?.get) throw new Error('Browser atau perangkat ini tidak mendukung WebAuthn/passkey.');
+      fingerprintStatus.textContent = 'Menunggu autentikasi perangkat…';
+      const challengeData = await api('/api/passkeys/authentication/options', { method: 'POST' });
+      const credential = await navigator.credentials.get({ publicKey: prepareCredentialOptions(challengeData.options, false) });
+      if (!credential) throw new Error('Autentikasi passkey dibatalkan.');
+      const proof = await api('/api/passkeys/authentication/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ challenge: challengeData.options.challenge, credential: serializeCredential(credential) }) });
+      const result = await api(`/api/documents/${encodeURIComponent(pendingAction.documentId)}/verify`, { method: 'POST', headers: { 'X-Passkey-Verification': proof.verificationToken } });
+      verificationToken = result.verificationToken;
+      fingerprintVisual.dataset.state = 'success';
+      fingerprintProgressFill.style.width = '100%';
+      fingerprintProgress.setAttribute('aria-valuenow', '100');
+      fingerprintStatus.textContent = 'Passkey berhasil diverifikasi.';
+      showMessage(fingerprintMessage, 'Autentikasi passkey berhasil. Anda dapat melanjutkan tindakan dokumen.', 'success');
+      continueFingerprintButton.hidden = false;
+    } catch (error) {
+      fingerprintVisual.dataset.state = 'failed';
+      fingerprintStatus.textContent = 'Autentikasi passkey gagal.';
+      const detail = error.message || 'Autentikasi passkey gagal.';
+      const guidance = /User Verification|UV|flags 0x/i.test(detail) ? ' Coba ulangi dan pilih passkey HP yang tadi berhasil. Pemeriksaan UV tetap diwajibkan demi keamanan.' : '';
+      showMessage(fingerprintMessage, `${detail}${guidance}`, 'error');
+      retryFingerprintButton.hidden = false;
+    } finally {
+      scanInProgress = false;
+      simulateFailure.disabled = false;
+    }
   }
 
   function formatSize(size) {
@@ -185,7 +380,13 @@
     pendingAction = { documentId, action };
     resetFingerprintDialog();
     const actionLabels = { view: 'melihat dokumen', download: 'mengunduh dokumen', delete: 'mengajukan penghapusan dokumen' };
-    fingerprintStatus.textContent = `Simulasi diperlukan sebelum ${actionLabels[action] || 'melanjutkan'}.`;
+    fingerprintStatus.textContent = passkeyEnabled ? `Autentikasi passkey diperlukan sebelum ${actionLabels[action] || 'melanjutkan'}.` : `Simulasi diperlukan sebelum ${actionLabels[action] || 'melanjutkan'}.`;
+    simulateFailure.closest('label').hidden = passkeyEnabled;
+    startFingerprintButton.textContent = passkeyEnabled ? 'Verifikasi dengan passkey' : 'Mulai Pemindaian';
+    if (!passkeyEnabled) {
+      fingerprintDescription.textContent = 'Ini adalah simulasi untuk demonstrasi. Browser tidak membaca sidik jari dan tidak ada sensor yang digunakan.';
+      fingerprintFootnote.textContent = 'Simulasi ini bukan autentikasi biometrik nyata atau bukti identitas.';
+    }
     if (!fingerprintDialog.open) fingerprintDialog.showModal();
   }
 
@@ -202,7 +403,13 @@
     closeFingerprintDialog.disabled = false;
     simulateFailure.disabled = true;
     fingerprintVisual.dataset.state = 'scanning';
-    fingerprintStatus.textContent = 'Memindai… simulasi sedang berjalan.';
+    fingerprintStatus.textContent = passkeyEnabled ? 'Menunggu autentikasi passkey…' : 'Memindai… simulasi sedang berjalan.';
+    if (passkeyEnabled) {
+      fingerprintProgressFill.style.width = '35%';
+      fingerprintProgress.setAttribute('aria-valuenow', '35');
+      await runPasskeyAction();
+      return;
+    }
     let progress = 0;
     fingerprintProgressFill.style.width = '0%';
     fingerprintProgress.setAttribute('aria-valuenow', '0');
@@ -356,10 +563,23 @@
       const user = data.user;
       const fullName = String(user.userMetadata?.full_name || '').trim();
       document.getElementById('citizenName').textContent = fullName || (user.email || 'Warga').split('@')[0];
-      const id = String(user.id || '').replace(/-/g, '').slice(0, 8).toUpperCase();
-      document.getElementById('citizenCode').textContent = id ? `RL-WRG-${id}` : 'RL-WRG-DEMO';
-      document.getElementById('emailStatus').textContent = user.emailConfirmedAt ? 'Email aktif' : 'Belum aktif';
-      showMessage(message, `Anda masuk sebagai ${user.email}.`, 'success');
+      let profileLoaded = false;
+      try {
+        const profileData = await api('/api/citizen/profile');
+        const profile = profileData.profile;
+        document.getElementById('citizenName').textContent = profile.fullName || fullName || (user.email || 'Warga').split('@')[0];
+        document.getElementById('citizenCode').textContent = profile.citizenCode || 'Belum tersedia';
+        document.getElementById('settingsFullName').value = profile.fullName || fullName || '';
+        document.getElementById('settingsEmail').value = profile.email || user.email || '';
+        document.getElementById('emailStatus').textContent = `${user.emailConfirmedAt ? 'Email aktif' : 'Belum aktif'} · ${profile.passkeyEnabled ? 'Passkey terdaftar' : 'Passkey belum terdaftar'}`;
+        profileLoaded = true;
+      } catch (profileError) {
+        document.getElementById('citizenCode').textContent = 'Profil belum tersedia';
+        document.getElementById('emailStatus').textContent = user.emailConfirmedAt ? 'Email aktif' : 'Belum aktif';
+        showMessage(message, `${profileError.message} Jika ini akun lama, periksa migrasi V2.1.`, 'error');
+      }
+      if (profileLoaded) showMessage(message, `Anda masuk sebagai ${user.email}.`, 'success');
+      await loadPasskeyStatus();
       await loadDocuments();
     } catch (error) {
       showMessage(message, error.message || 'Sesi tidak valid.', 'error');

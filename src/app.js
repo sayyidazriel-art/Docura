@@ -2,10 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
+const { randomUUID } = require("node:crypto");
 
 const { supabase } = require("./config/supabase");
 
 const app = express();
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  const requestId = randomUUID();
+  req.requestId = requestId;
+  res.setHeader("X-Request-ID", requestId);
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 app.use(
   helmet({
@@ -25,6 +34,8 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/documents", require("./routes/documents"));
 app.use("/api/officer", require("./routes/officer"));
 app.use("/api/citizen", require("./routes/citizen-recovery"));
+app.use("/api/citizen/account", require("./routes/citizen-account"));
+app.use("/api/passkeys", require("./routes/passkeys"));
 app.use(express.static(path.join(__dirname, "../public")));
 
 

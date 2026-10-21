@@ -18,6 +18,28 @@ async function getCitizen(req) {
   if (roleRow && roleRow.role_code !== 'citizen') return { error: 'Portal ini hanya untuk akun warga.', status: 403 };
   return { auth, user: data.user };
 }
+router.get('/profile', async (req, res) => {
+  try {
+    const result = await getCitizen(req);
+    if (result.error) return res.status(result.status).json({ success: false, message: result.error });
+    const { data, error } = await result.auth
+      .from('docura_citizen_profiles')
+      .select('user_id,citizen_code,full_name,email,is_active,passkey_enabled,created_at')
+      .eq('user_id', result.user.id)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return res.status(404).json({ success: false, message: 'Profil warga belum tersedia. Pastikan migrasi Docura V2.1 sudah dijalankan dan akun warga terdaftar.' });
+    return res.json({ success: true, profile: {
+      userId: data.user_id, citizenCode: data.citizen_code, fullName: data.full_name,
+      email: data.email || result.user.email || '', active: Boolean(data.is_active),
+      passkeyEnabled: Boolean(data.passkey_enabled), createdAt: data.created_at
+    } });
+  } catch (error) {
+    console.error('Citizen profile lookup failed:', error.message);
+    return res.status(500).json({ success: false, message: 'Profil warga belum dapat dimuat.' });
+  }
+});
+
 router.get('/office-recovery', async (req,res) => {
   try {
     const result = await getCitizen(req);

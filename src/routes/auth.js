@@ -1,5 +1,6 @@
 const express = require("express");
-const { createAuthClient } = require("../config/supabase");
+const { createAuthClient, createServiceClient } = require("../config/supabase");
+const { rateLimit } = require("../middleware/rate-limit");
 
 const router = express.Router();
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,8 +12,24 @@ function publicError(error) {
   if (/user already registered/i.test(message)) return "Email ini sudah terdaftar. Silakan masuk atau gunakan fitur kirim ulang aktivasi.";
   if (/password should be at least/i.test(message)) return "Kata sandi belum memenuhi ketentuan minimum.";
   if (/rate limit/i.test(message)) return "Terlalu banyak permintaan. Tunggu beberapa saat lalu coba lagi.";
-  return message;
+  // Never return raw provider errors to clients; they may contain implementation details.
+  return "Permintaan tidak dapat diproses saat ini. Periksa data Anda atau coba lagi nanti.";
 }
+
+function publicAppUrl() {
+  const configured = String(process.env.PUBLIC_APP_URL || process.env.APP_ORIGIN || "").split(",")[0].trim();
+  if (!configured) return "http://localhost:3000";
+  try {
+    const parsed = new URL(configured);
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Invalid protocol');
+    return parsed.origin;
+  } catch {
+    throw new Error("PUBLIC_APP_URL atau APP_ORIGIN harus berupa origin HTTP(S) yang valid.");
+  }
+}
+
+const authRateLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+router.use(['/register', '/login', '/resend-activation', '/forgot-password'], authRateLimit);
 
 function getBearer(req) {
   const value = req.get("authorization") || "";
@@ -41,10 +58,28 @@ router.post("/register", async (req, res) => {
       password,
       options: {
         data: { full_name: name, account_type: "citizen" },
-        emailRedirectTo: `${req.protocol}://${req.get("host")}/login.html?activated=1`,
+        emailRedirectTo: `${publicAppUrl()}/login.html?activated=1`,
       },
     });
     if (error) return res.status(400).json({ success: false, message: publicError(error) });
+
+    // Notify active administrators about new citizen registration. Failure to create a
+    // notification must never break public self-registration.
+    if (data.user?.id) {
+      try {
+        const service = createServiceClient();
+        const { data: admins } = await service.from('refugeeledger_user_roles').select('user_id').eq('role_code', 'admin').eq('is_active', true);
+        if (admins?.length) {
+          await service.from('docura_notifications').insert(admins.map(admin => ({
+            recipient_id: admin.user_id, actor_id: data.user.id, event_type: 'citizen_registered',
+            title: 'Pendaftaran warga baru', message: 'Akun warga baru berhasil mendaftar. Buka menu Akun warga untuk melihat data pendaftaran.',
+            target_type: 'citizen_account', target_id: data.user.id
+          })));
+        }
+      } catch (_) {
+        // Notifications require the V2.7.0 migration and server service-role key.
+      }
+    }
 
     // If email confirmation is enabled, Supabase normally returns a user without a session.
     // Never treat registration as official identity verification.
@@ -94,7 +129,7 @@ router.post("/resend-activation", async (req, res) => {
   if (!EMAIL_RE.test(email)) return res.status(400).json({ success: false, message: "Masukkan alamat email yang valid." });
   try {
     const auth = createAuthClient();
-    const { error } = await auth.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${req.protocol}://${req.get("host")}/login.html?activated=1` } });
+    const { error } = await auth.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${publicAppUrl()}/login.html?activated=1` } });
     if (error) return res.status(400).json({ success: false, message: publicError(error) });
     return res.json({ success: true, message: "Jika akun tersebut belum aktif, instruksi aktivasi akan dikirim ke email terkait." });
   } catch (error) {
@@ -108,7 +143,7 @@ router.post("/forgot-password", async (req, res) => {
   if (!EMAIL_RE.test(email)) return res.status(400).json({ success: false, message: "Masukkan alamat email yang valid." });
   try {
     const auth = createAuthClient();
-    const { error } = await auth.auth.resetPasswordForEmail(email, { redirectTo: `${req.protocol}://${req.get("host")}/login.html?reset=1` });
+    const { error } = await auth.auth.resetPasswordForEmail(email, { redirectTo: `${publicAppUrl()}/login.html?reset=1` });
     if (error) return res.status(400).json({ success: false, message: publicError(error) });
     return res.json({ success: true, message: "Jika email terdaftar, instruksi pemulihan kata sandi akan dikirim." });
   } catch (error) {

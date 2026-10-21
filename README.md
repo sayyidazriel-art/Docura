@@ -1,76 +1,115 @@
-# Docura
+# Docura V2.9.0
 
-**Decentralized Object Credential Unification & Risk Audit**
+**Docura — Decentralized Object Credential Unification & Risk Audit** adalah prototipe web untuk membantu pengelolaan dan pemulihan dokumen warga terdampak bencana. Sistem menyediakan portal warga, portal petugas, alur pemulihan normal dan darurat, pengelolaan kasus, persetujuan, QR untuk proses penyerahan, dan pencatatan aktivitas.
 
-Docura is a prototype for document handling and verification workflows, with role-based access, a private Supabase Storage bucket, case management, Normal/Emergency Mode, and QR handover tokens. The current Stage 9 release is a demonstrable application foundation—not yet a blockchain/ZKP/real-biometric system.
+> **Status proyek:** prototipe/demo. Jangan gunakan data pribadi, dokumen identitas asli, atau data biometrik sungguhan. Integrasi langsung ke sistem pemerintah, pembandingan sidik jari dengan referensi KTP-el, blockchain, dan Zero-Knowledge Proof (ZKP) belum diimplementasikan.
 
-> **Prototype notice:** fingerprint/face checks are simulations. Blockchain integration, Zero-Knowledge Proof generation/verification, and physical fingerprint hardware integration are not implemented. Do not use this version to process real refugee, identity, or other sensitive personal data.
+## Fitur utama
 
-## What is included
+### Portal warga
+- Registrasi dan autentikasi warga melalui Supabase Auth.
+- Pengelolaan dokumen pribadi melalui Supabase Storage privat.
+- Alur pemulihan mandiri yang tersedia pada aplikasi.
+- Informasi proses pemulihan sesuai kemampuan portal yang sudah tersedia.
 
-- Citizen registration/login through Supabase Auth.
-- Role-based staff login and server-side authorization.
-- Recovery case workflow, Supervisor review, QR token issuance/validation, and Normal/Emergency Mode.
-- Private document upload for PDF/JPEG/PNG, up to 10 MiB, with server-side file signature checks.
-- Supabase database and Storage RLS policies/migrations.
-- Unit tests for supported file signatures.
+### Portal petugas
+- **Petugas Pemulihan (`recovery_officer`)**: membuat dan memproses kasus pemulihan.
+- **Supervisor (`supervisor`)**: meninjau, menyetujui, atau menolak kasus sesuai alur aplikasi.
+- **Pencetak Dokumen (`document_printer`)**: melanjutkan proses QR, pencetakan, dan penyerahan dokumen yang disetujui.
+- Autentikasi passkey/WebAuthn untuk alur yang didukung.
+- Mode pemulihan Normal dan Emergency sesuai pengaturan aplikasi.
+- Notifikasi operasional antarp etugas dan notifikasi administratif.
+- Bukti pemulihan (*Recovery Receipt*) untuk kasus yang selesai, dapat dicetak atau disimpan sebagai PDF melalui browser.
 
-## Requirements
+### Portal Admin
+- Manajemen akun petugas dan penetapan role petugas.
+- Pengawasan aktivitas dan pengaturan Emergency Mode sesuai kewenangan aplikasi.
+- Dashboard analitik operasional yang hanya tersedia bagi Admin.
+- Notifikasi administratif, termasuk pendaftaran warga baru.
+- Admin tidak membuat akun warga; warga mendaftar sendiri.
 
-- Node.js LTS (Node.js 20 or newer recommended).
+### Aksesibilitas dan antarmuka
+- Antarmuka Bahasa Indonesia dan Inggris pada bagian aplikasi yang telah diterjemahkan.
+- Kontrol ukuran teks dan mode kontras tinggi.
+- UI responsif untuk desktop dan ponsel.
+- Role gabungan **Perwakilan (`representative`) sudah dihapus**. Role petugas yang didukung adalah Petugas Pemulihan, Supervisor, dan Pencetak Dokumen.
+
+### QR, passkey, dan biometrik
+- Alur QR digunakan untuk proses penyerahan dokumen.
+- Pilihan simulasi integrasi referensi KTP-el seperti **Cocok / Tidak cocok / Penyedia tidak tersedia** telah dihapus dari alur QR/pencetakan.
+- WebAuthn/passkey menggunakan autentikator lokal yang didukung perangkat. Aplikasi tidak menerima atau membaca data sidik jari mentah dari sistem operasi.
+- Simulasi pemeriksaan identitas pada bagian alur kasus, jika ditampilkan, tetap merupakan simulasi dan bukan verifikasi biometrik pemerintah.
+
+## Teknologi
+- **Backend:** Node.js, Express.
+- **Frontend:** HTML, CSS, JavaScript.
+- **Auth & database:** Supabase Auth dan PostgreSQL.
+- **Penyimpanan dokumen:** Supabase Storage dengan bucket privat dan kebijakan akses.
+- **Autentikasi perangkat:** WebAuthn/passkey pada alur yang didukung.
+- **QR:** library `qrcode`.
+- **Pengujian:** Node.js built-in test runner.
+
+## Persyaratan
+- Node.js 20 atau lebih baru (disarankan versi LTS).
 - npm.
-- A Supabase account/project.
-- Git (optional if downloading the ZIP instead of cloning).
+- Proyek Supabase untuk demo.
+- Git jika ingin melakukan clone repository.
 
-## Quick start (new demo installation)
+## Instalasi lokal
 
-### 1. Get the source
+### 1. Dapatkan source code
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone <URL-REPOSITORY-GITHUB-LO>
 cd docura
 ```
 
-Or download the repository ZIP from GitHub and extract it. Run commands from the folder containing `package.json`.
+Atau unduh ZIP repository dari GitHub, ekstrak, lalu jalankan perintah dari folder yang berisi `package.json`.
 
-### 2. Prepare Supabase
+### 2. Siapkan database Supabase
 
-1. Create a new Supabase project dedicated to the Docura demo.
-2. Open its **SQL Editor**.
-3. Open `database/install-all.sql` from the repository, copy its full contents into SQL Editor, and run it once.
-4. Follow [`database/README.md`](database/README.md) to create staff accounts and assign roles.
-5. In Supabase Authentication settings, add the local app URL to the allowed redirect URLs if required by your Auth configuration: `http://localhost:3000/**`.
+1. Buat proyek Supabase khusus untuk demo Docura.
+2. Buka **Supabase Dashboard → SQL Editor**.
+3. Buka file [`database/install-all.sql`](database/install-all.sql), salin seluruh isinya, lalu jalankan **satu kali** pada proyek Supabase yang masih baru/kosong.
+4. Periksa hasil eksekusi dan pastikan tidak ada error SQL.
+5. Gunakan [`database/README.md`](database/README.md) untuk langkah setup database dan penetapan role.
 
-**Do not run `install-all.sql` on an existing production database without a backup and migration review.** For an existing installation, see the ordered individual migrations in `database/README.md`.
+> `database/install-all.sql` adalah satu-satunya file SQL yang disediakan untuk instalasi baru. Jangan menjalankan file ini pada database Docura yang sudah berisi data. Untuk database yang sudah ada, buat backup dan tinjau perbedaan skema terlebih dahulu; jangan menganggap skrip instalasi baru sebagai migrasi upgrade otomatis.
 
-### 3. Configure environment variables
+### 3. Konfigurasi environment
 
-Copy `.env.example` to `.env`, then fill in the project URL and publishable key (or legacy anon key) from the Supabase project settings.
+Salin `.env.example` menjadi `.env`.
 
-Windows PowerShell:
+**Windows PowerShell:**
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-macOS/Linux:
+**macOS/Linux:**
 
 ```bash
 cp .env.example .env
 ```
 
-Example `.env` values:
+Isi variabel berikut berdasarkan proyek Supabase milik sendiri:
 
 ```dotenv
 PORT=3000
+PUBLIC_APP_URL=http://localhost:3000
 SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
 SUPABASE_ANON_KEY=YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY
-APP_ORIGIN=
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVER_ONLY_SERVICE_ROLE_KEY
+WEBAUTHN_ORIGIN=http://localhost:3000
+WEBAUTHN_RP_ID=localhost
+WEBAUTHN_RP_NAME=Docura
 ```
 
-Do not commit `.env`. Never place a Supabase secret/service-role key in this app's environment, frontend code, or a public repository.
+`SUPABASE_SERVICE_ROLE_KEY` diperlukan untuk operasi server tertentu seperti pengelolaan akun petugas dan operasi WebAuthn yang membutuhkan hak server. Simpan hanya di `.env` server. **Jangan pernah memasukkan key tersebut ke JavaScript frontend, GitHub, screenshot, atau membagikannya.** File `.env` sudah diabaikan oleh `.gitignore`.
 
-### 4. Install dependencies and run checks
+Jika konfigurasi Supabase Auth memerlukan URL redirect, tambahkan URL lokal yang digunakan aplikasi ke daftar redirect URL yang diizinkan.
+
+### 4. Instal dependensi dan jalankan aplikasi
 
 ```bash
 npm install
@@ -78,67 +117,86 @@ npm test
 npm start
 ```
 
-Open `http://localhost:3000`. Stop the server with `Ctrl+C`. For auto-reload during development, use `npm run dev`.
+Buka `http://localhost:3000`. Untuk mode pengembangan dengan auto-reload:
 
-## Demo accounts and roles
+```bash
+npm run dev
+```
 
-Create accounts in **Supabase Dashboard → Authentication → Users → Add user**. Then assign roles by inserting each account UUID into `public.refugeeledger_user_roles` in SQL Editor. Examples and role codes are documented in [`database/README.md`](database/README.md).
+Hentikan server dengan `Ctrl+C`.
 
-| Role code | Purpose in prototype |
+## Akun dan role demo
+
+Gunakan akun terpisah untuk setiap role. Pembuatan akun warga dilakukan melalui registrasi mandiri. Akun petugas dikelola oleh Admin melalui fitur Manajemen Petugas. Untuk akun Admin pertama pada proyek demo, buat pengguna melalui Supabase Auth lalu tetapkan role `admin` menggunakan SQL sesuai panduan [`database/README.md`](database/README.md).
+
+| Role code | Fungsi |
 |---|---|
-| `citizen` | Citizen portal and own document workflows |
-| `recovery_officer` | Create/manage cases within workflow permissions |
-| `supervisor` | Review and approve/reject cases |
-| `document_printer` | Validate QR and complete handover workflow |
-| `admin` | Administrative controls, including Emergency Mode |
+| `citizen` | Portal warga dan dokumen milik sendiri |
+| `recovery_officer` | Membuat dan memproses kasus pemulihan |
+| `supervisor` | Meninjau dan memutuskan persetujuan kasus |
+| `document_printer` | Proses QR, pencetakan, dan penyerahan dokumen |
+| `admin` | Pengawasan, pengaturan administratif, manajemen petugas, dan analitik |
 
-Do not grant staff roles through public registration. Use separate accounts for testing different roles.
+Jangan memberikan role istimewa melalui registrasi publik. Role ditetapkan melalui mekanisme administratif yang didukung aplikasi.
 
-## Suggested demo sequence
+## Urutan demo yang disarankan
 
-1. Open the landing page and explain the use case.
-2. Log in as Recovery Officer and create a case using fictional data.
-3. Demonstrate the identity-check simulation and send the case for review.
-4. Log in as Supervisor and approve/reject the case.
-5. Show the QR receipt and validate the token as Document Printer. Demonstrate invalid/expired/reused token rejection where possible.
-6. Demonstrate Admin-controlled Emergency Mode and case assignment restrictions.
-7. Upload a synthetic PDF/JPEG/PNG as a citizen, then demonstrate the private document workflow.
-8. Explain limitations honestly: no blockchain/ZKP/real fingerprint integration yet.
+1. Jelaskan tujuan Docura dan tegaskan bahwa aplikasi adalah prototipe.
+2. Tampilkan landing page dan registrasi/portal warga menggunakan data fiktif.
+3. Peragakan unggah dokumen contoh sintetis (PDF/JPEG/PNG; maksimum 10 MiB jika batas ini diaktifkan pada konfigurasi saat ini).
+4. Masuk sebagai Petugas Pemulihan dan buat kasus demo.
+5. Tunjukkan alur pemeriksaan kasus dan jelaskan dengan jujur bagian mana yang masih berupa simulasi.
+6. Masuk sebagai Supervisor untuk meninjau dan menyetujui/menolak kasus.
+7. Masuk sebagai Pencetak Dokumen untuk meneruskan alur QR dan penyerahan.
+8. Tunjukkan Recovery Receipt untuk kasus selesai.
+9. Masuk sebagai Admin untuk melihat notifikasi, mengelola akun petugas, mengawasi Emergency Mode, dan membuka analitik.
+10. Jelaskan bahwa Docura belum terhubung ke biometrik pemerintah, blockchain, atau ZKP.
 
-## SQL files
+## Struktur proyek
 
-- [`database/install-all.sql`](database/install-all.sql) — ordered installation script for a fresh, dedicated demo Supabase project.
-- [`database/stage5-document-storage.sql`](database/stage5-document-storage.sql) — document metadata, private bucket and Storage policies.
-- [`database/stage7b-officer-roles.sql`](database/stage7b-officer-roles.sql) — role registry and audit log.
-- [`database/stage7d-case-management.sql`](database/stage7d-case-management.sql) — case workflow and RPC.
-- [`database/stage8a-normal-multicase-popup-fix.sql`](database/stage8a-normal-multicase-popup-fix.sql) — Normal Mode multi-case behavior.
-- [`database/stage8b-citizen-recovery-guidance-qr-persistence.sql`](database/stage8b-citizen-recovery-guidance-qr-persistence.sql) — disables direct citizen office-case RPC.
-- [`database/stage9-security-hardening.sql`](database/stage9-security-hardening.sql) — Stage 9 hardening.
+```text
+ docura/
+ ├── public/       # Halaman HTML, CSS, dan JavaScript frontend
+ ├── src/
+ │   ├── config/   # Konfigurasi Supabase
+ │   ├── middleware/
+ │   ├── routes/   # Endpoint aplikasi
+ │   └── services/ # WebAuthn, audit, validasi, dan layanan pendukung
+ ├── database/
+ │   ├── install-all.sql  # Satu skrip SQL instalasi database baru
+ │   └── README.md        # Panduan Supabase dan role
+ ├── docs/         # Changelog dan panduan demo
+ ├── tests/        # Pengujian otomatis
+ ├── .env.example
+ ├── .gitignore
+ ├── package.json
+ └── README.md
+```
 
-Run the all-in-one script once on a fresh project; do not then run each individual migration on the same project unnecessarily.
+## Keamanan dan privasi
 
-## Security and privacy
+- Gunakan hanya nama, akun, dan dokumen fiktif untuk demo.
+- Pertahankan bucket `citizen-documents` sebagai **private**.
+- Jangan commit `.env`, kredensial, token, dokumen identitas asli, data biometrik, atau dump database.
+- Pastikan kebijakan Row Level Security (RLS) tetap aktif dan tinjau hak akses untuk proyek Supabase yang digunakan.
+- Kunci service-role hanya boleh tersedia di server. Key tersebut melewati RLS dan tidak boleh diekspos kepada browser atau pengguna.
+- Gunakan HTTPS dan pengelolaan secret yang layak sebelum deployment publik.
+- Repository ini merupakan prototipe dan belum menjalani audit keamanan independen atau penerimaan produksi secara menyeluruh.
 
-- Use synthetic demo data only.
-- Keep document storage private.
-- Do not commit `.env`, tokens, passwords, real identity documents, biometric data, or production database dumps.
-- Keep RLS and Storage policies enabled. A publishable/anon key is not a substitute for authorization policies.
-- Use HTTPS and production-grade secrets management before any public deployment.
-- This repository is a prototype and has not undergone a full independent security audit or production acceptance test.
+## Batasan yang diketahui
 
-## Current limitations
+- Belum ada integrasi langsung dengan layanan identitas atau biometrik pemerintah, termasuk pencocokan sidik jari dengan referensi KTP-el.
+- Pilihan hasil simulasi pencocokan KTP-el telah dihapus dari alur QR/pencetakan.
+- WebAuthn/passkey mengandalkan autentikator lokal pada perangkat; aplikasi tidak memperoleh data sidik jari mentah.
+- Blockchain dan Zero-Knowledge Proof (ZKP) belum diimplementasikan.
+- Dukungan terjemahan Bahasa Inggris belum mencakup setiap pesan khusus pada seluruh alur.
+- Pengujian otomatis tidak menggantikan pengujian integrasi pada proyek Supabase dan perangkat demo milik pengguna.
 
-- Fingerprint/face verification is simulated.
-- QR scanning UI uses a token entry workflow; dedicated camera/scanner integration is not included.
-- Blockchain and ZKP are not implemented.
-- The provided SQL and local tests do not prove the entire application is secure; test all role and RLS paths in your own Supabase demo project.
+## Dokumentasi tambahan
 
-## Project documentation
+- [`database/README.md`](database/README.md) — setup database Supabase dan role.
+- [`docs/DEMO-GUIDE.md`](docs/DEMO-GUIDE.md) — panduan persiapan dan urutan demo.
 
-- [`database/README.md`](database/README.md) — SQL setup and role assignment.
-- [`docs/DEMO-GUIDE.md`](docs/DEMO-GUIDE.md) — presentation checklist.
-- [`README-STAGE9-SECURITY-HARDENING.md`](README-STAGE9-SECURITY-HARDENING.md) — Stage 9 notes and known verification limits.
+## Lisensi
 
-## License
-
-No open-source license has been selected yet. Unless a license is added, do not assume that the repository grants broad permission to redistribute or reuse the code. Choose a license before publicly publishing the repository.
+Belum ada lisensi open-source yang ditetapkan secara eksplisit. Tambahkan file `LICENSE` sebelum menyatakan bahwa kode ini dapat digunakan ulang atau didistribusikan berdasarkan lisensi tertentu.

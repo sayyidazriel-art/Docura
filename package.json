@@ -1,6 +1,6 @@
 {
   "name": "docura",
-  "version": "1.0.0",
+  "version": "2.6.1",
   "description": "Docura \u2014 Decentralized Object Credential Unification & Risk Audit",
   "main": "index.js",
   "directories": {

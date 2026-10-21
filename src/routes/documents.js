@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const path = require("path");
 const { createAuthClient } = require("../config/supabase");
 const { validateFileSignature } = require("../services/file-validation");
+const { consumeActionProof } = require("../services/passkey-state");
 
 const router = express.Router();
 const BUCKET = "citizen-documents";
@@ -146,9 +147,18 @@ router.post("/:id/verify", async (req, res) => {
   try {
     const doc = await ownedDocument(req, req.params.id);
     if (!doc || doc.status !== "ACTIVE") return res.status(404).json({ success: false, message: "Dokumen tidak ditemukan atau tidak aktif." });
+    const { data: profile, error: profileError } = await req.userSupabase
+      .from("docura_citizen_profiles").select("passkey_enabled").eq("user_id", req.user.id).maybeSingle();
+    if (profileError) throw profileError;
+    if (profile?.passkey_enabled) {
+      const passkeyProof = req.get("x-passkey-verification") || "";
+      if (!consumeActionProof(req.user.id, passkeyProof)) {
+        return res.status(403).json({ success: false, requiresPasskey: true, message: "Passkey diperlukan sebelum mengakses dokumen. Lakukan autentikasi passkey dan coba lagi." });
+      }
+    }
     const token = crypto.randomBytes(32).toString("hex");
     verificationTokens.set(token, { userId: req.user.id, documentId: doc.id, expiresAt: Date.now() + TOKEN_TTL_MS });
-    return res.json({ success: true, verificationToken: token, expiresInSeconds: TOKEN_TTL_MS / 1000, message: "Simulasi verifikasi berhasil. Token berlaku 2 menit dan hanya dapat digunakan sekali." });
+    return res.json({ success: true, verificationToken: token, expiresInSeconds: TOKEN_TTL_MS / 1000, message: profile?.passkey_enabled ? "Passkey berhasil diverifikasi. Token akses dokumen berlaku 2 menit dan hanya dapat digunakan sekali." : "Simulasi verifikasi berhasil. Token berlaku 2 menit dan hanya dapat digunakan sekali." });
   } catch (error) {
     console.error("Document verification error:", error.message);
     return res.status(500).json({ success: false, message: "Verifikasi dokumen tidak dapat diproses." });

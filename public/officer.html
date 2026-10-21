@@ -18,6 +18,10 @@
       <button class="nav-item active" data-view="overview"><span>▦</span> Ringkasan</button>
       <button class="nav-item" data-view="cases"><span>▤</span> Kasus pemulihan <b id="navCaseCount">0</b></button>
       <button class="nav-item" data-view="workflow"><span>✓</span> Alur verifikasi</button>
+      <button class="nav-item" data-view="citizens" id="navCitizens" hidden><span>♙</span> Akun warga</button>
+      <button class="nav-item" data-view="staff" id="navStaff" hidden><span>♟</span> Manajemen petugas</button>
+      <button class="nav-item" data-view="notifications"><span>♧</span> Notifikasi <b id="navNotificationCount" hidden>0</b></button>
+      <button class="nav-item" data-view="analytics" id="navAnalytics" hidden><span>▥</span> Analitik operasional</button>
       <div class="side-label">SISTEM</div>
       <div class="emergency-card">
         <div class="emergency-top"><span class="pulse"></span><strong>Emergency Mode</strong></div>
@@ -33,13 +37,14 @@
         <div><div class="crumb">Docura <span>/</span> <strong id="crumbTitle">Ringkasan</strong></div><div class="top-subtitle" id="portalSubtitle">Portal petugas Docura</div></div>
         <div class="top-actions">
           <span class="demo-pill">DEMO MODE</span>
-          <div class="theme-toggle" role="group" aria-label="Tema"><button data-theme="light" aria-pressed="true" title="Tema terang">☀</button><button data-theme="dark" aria-pressed="false" title="Tema gelap">☾</button></div>
+          <button class="icon-btn notification-trigger" id="notificationTrigger" type="button" aria-label="Buka notifikasi" title="Notifikasi">♧<b id="notificationCount" hidden>0</b></button>
+          <div class="accessibility-tools" role="group" aria-label="Aksesibilitas"><label class="sr-only" for="languageSelect">Bahasa antarmuka</label><select id="languageSelect" class="language-select" aria-label="Bahasa antarmuka"><option value="id">ID</option><option value="en">EN</option></select><button class="access-btn" id="fontSmaller" type="button" aria-label="Perkecil teks" title="Perkecil teks">A−</button><button class="access-btn" id="fontLarger" type="button" aria-label="Perbesar teks" title="Perbesar teks">A+</button><button class="access-btn" id="contrastToggle" type="button" aria-pressed="false" aria-label="Kontras tinggi" title="Kontras tinggi">◐</button></div><div class="theme-toggle" role="group" aria-label="Tema"><button data-theme="light" aria-pressed="true" title="Tema terang">☀</button><button data-theme="dark" aria-pressed="false" title="Tema gelap">☾</button></div>
           <div class="profile"><span class="avatar" id="officerAvatar">PT</span><span><strong id="officerName">Memuat profil…</strong><small id="officerRole">Memverifikasi akses</small></span><button class="small-btn" id="officerLogout" type="button">Keluar</button></div>
         </div>
       </header>
 
       <section class="content">
-        <div class="notice"><span class="notice-icon">ⓘ</span><p><strong>Mode demonstrasi.</strong> Data kasus tersimpan terpusat di Supabase. Pemindaian wajah adalah simulasi antarmuka dan tidak memverifikasi identitas sungguhan.</p></div>
+        <div class="notice"><span class="notice-icon">ⓘ</span><p><strong>Mode demonstrasi.</strong> Data kasus tersimpan terpusat di Supabase. Pemindaian sidik jari pada alur kasus adalah simulasi antarmuka dan tidak memverifikasi identitas sungguhan.</p></div>
         <div id="pageContent" aria-live="polite"></div>
         <footer>Docura · Decentralized Object Credential Unification &amp; Risk Audit · Prototipe demonstrasi</footer>
       </section>

@@ -54,3 +54,28 @@
 
 /* Local file preview for the private document upload form */
 .file-preview{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;border:1px solid var(--border,#dbe3ee);border-radius:12px;background:var(--surface,#fff);min-width:0}.file-preview[hidden]{display:none}.file-preview img{width:76px;height:64px;object-fit:contain;border-radius:8px;background:#f2f5f9}.file-preview-icon{width:76px;height:64px;display:grid;place-items:center;border-radius:8px;background:#fff0ef;color:#b42318;font-weight:850;letter-spacing:.5px}.file-preview div{min-width:0}.file-preview strong,.file-preview small{display:block;overflow-wrap:anywhere}.file-preview strong{font-size:13px}.file-preview small{font-size:11px;color:var(--muted,#64748b);margin-top:4px}
+
+/* V2.2 passkey settings: additive styles, preserving the existing citizen dashboard. */
+.passkey-panel{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);gap:24px;align-items:start;margin:24px 0;padding:24px;border:1px solid var(--border-color,#dce3ec);border-radius:20px;background:var(--card-bg,#fff);box-shadow:0 8px 24px rgba(25,45,75,.05)}
+.passkey-panel h2{margin:.35rem 0 .6rem}.passkey-panel p{line-height:1.6}.passkey-panel-actions{display:flex;flex-direction:column;gap:10px}.passkey-panel-actions small{opacity:.75;line-height:1.5}.passkey-list{display:grid;gap:8px;margin-top:4px}.passkey-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--border-color,#dce3ec);border-radius:12px;font-size:.9rem}.passkey-item button{border:0;background:transparent;color:#b42318;cursor:pointer;font:inherit}.passkey-panel .form-message:not(.show){display:none}
+@media(max-width:720px){.passkey-panel{grid-template-columns:1fr;padding:18px}}
+
+/* Account settings dialog: additive V2.3 UI, keeps the existing dashboard intact. */
+.settings-dialog{width:min(760px,calc(100% - 24px));max-width:760px;max-height:min(88vh,920px);padding:0;border:1px solid var(--border);border-radius:22px;background:var(--surface);color:var(--text);box-shadow:0 24px 80px #07182b55;overflow:auto}
+.settings-dialog::backdrop{background:rgba(8,20,38,.62);backdrop-filter:blur(3px)}
+.settings-card{position:relative;padding:clamp(22px,4vw,36px)}
+.settings-card h2{margin:8px 0;font-size:clamp(25px,4vw,32px)}
+.settings-intro,.settings-section>p{color:var(--muted);font-size:13px;line-height:1.65}
+.settings-section{margin-top:22px;padding-top:20px;border-top:1px solid var(--border)}
+.settings-section h3{margin:0 0 13px;font-size:16px}
+.settings-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 18px}
+.settings-form label{display:grid;gap:7px;font-size:12px;font-weight:700;color:var(--text)}
+.settings-form input{width:100%;min-width:0;border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--surface);color:var(--text);outline:none}
+.settings-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 14%,transparent)}
+.settings-form button,.settings-form small{grid-column:1/-1}
+.settings-form small,.settings-section>small{color:var(--muted);font-size:11px;line-height:1.6}
+.settings-form .button-secondary{width:100%}
+.settings-footer{display:flex;justify-content:flex-end;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.passkey-item button{padding:7px 10px;border:1px solid color-mix(in srgb,var(--danger) 35%,var(--border));border-radius:8px;background:color-mix(in srgb,var(--danger) 7%,var(--surface));color:var(--danger);font-size:12px;font-weight:700;white-space:nowrap}
+.passkey-item button:disabled{opacity:.6;cursor:wait}
+@media(max-width:620px){.settings-form{grid-template-columns:1fr}.settings-card{padding:22px 16px}.settings-dialog{max-height:92vh}.portal-actions{gap:6px}.portal-actions .button-secondary{padding:9px 10px;font-size:12px}}

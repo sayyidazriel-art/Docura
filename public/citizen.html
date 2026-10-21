@@ -1,14 +1,16 @@
 <!doctype html>
-<html lang="id" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102544"><title>Portal Warga — Docura</title><link rel="stylesheet" href="/auth.css"><script src="/citizen.js" defer></script></head><body class="citizen-page"><header class="portal-header"><a class="brand" href="/"><span class="brand-mark brand-mark-on-light">D</span><span class="brand-copy"><strong>Docura</strong><small>Portal Warga</small></span></a><div class="portal-actions"><div class="theme-control" aria-label="Pilihan tema"><button class="theme-button" type="button" data-theme-choice="light" aria-label="Tema terang" aria-pressed="true">☀</button><button class="theme-button" type="button" data-theme-choice="dark" aria-label="Tema gelap" aria-pressed="false">☾</button></div><button class="button-secondary" id="logoutButton" type="button">Keluar</button></div></header><main class="portal-content"><div id="pageMessage" class="form-message show success" role="status" aria-live="polite">Memeriksa sesi akun…</div><section class="welcome-panel"><div><span class="aside-kicker">DASHBOARD WARGA</span><h1>Halo, <span id="citizenName">Warga</span> 👋</h1><p>Simpan salinan digital dokumen penting Anda secara privat untuk membantu proses pemulihan setelah bencana.</p></div><div class="citizen-code"><small>KODE AKUN DEMONSTRASI</small><strong id="citizenCode">RL-WRG-────────</strong></div></section><section class="dashboard-grid" aria-label="Ringkasan portal warga"><article class="dash-card"><span class="dash-icon">▤</span><h2>Dokumen Saya</h2><p>Kelola salinan digital yang Anda unggah ke penyimpanan privat.</p><span class="status-pill" id="documentCount">Memuat dokumen…</span></article><article class="dash-card"><span class="dash-icon">◈</span><h2>Keamanan Akun</h2><p>Status email akun Anda.</p><span class="status-pill" id="emailStatus">Memeriksa…</span></article><article class="dash-card"><span class="dash-icon">↻</span><h2>Pemulihan Dokumen</h2><p>Permintaan pemulihan hanya diproses petugas berwenang setelah bencana dan pemeriksaan yang diperlukan.</p><span class="status-pill">Alur petugas</span></article></section><section class="recovery-guide" aria-labelledby="recoveryGuideHeading">
+<html lang="id" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102544"><title>Portal Warga — Docura</title><link rel="stylesheet" href="/auth.css"><script src="/citizen.js" defer></script>  <link rel="stylesheet" href="/accessibility.css">
+  <script src="/accessibility.js" defer></script>
+</head><body class="citizen-page"><header class="portal-header"><a class="brand" href="/"><span class="brand-mark brand-mark-on-light">D</span><span class="brand-copy"><strong>Docura</strong><small>Portal Warga</small></span></a><div class="portal-actions"><div class="theme-control" aria-label="Pilihan tema"><button class="theme-button" type="button" data-theme-choice="light" aria-label="Tema terang" aria-pressed="true">☀</button><button class="theme-button" type="button" data-theme-choice="dark" aria-label="Tema gelap" aria-pressed="false">☾</button></div><button class="button-secondary" id="openSettingsButton" type="button">⚙ Pengaturan</button><button class="button-secondary" id="logoutButton" type="button">Keluar</button></div></header><main class="portal-content"><div id="pageMessage" class="form-message show success" role="status" aria-live="polite">Memeriksa sesi akun…</div><section class="welcome-panel"><div><span class="aside-kicker">DASHBOARD WARGA</span><h1>Halo, <span id="citizenName">Warga</span> 👋</h1><p>Simpan salinan digital dokumen penting Anda secara privat untuk membantu proses pemulihan setelah bencana.</p></div><div class="citizen-code"><small>KODE WARGA DOCURA</small><strong id="citizenCode">DOC-────────────</strong></div></section><section class="dashboard-grid" aria-label="Ringkasan portal warga"><article class="dash-card"><span class="dash-icon">▤</span><h2>Dokumen Saya</h2><p>Kelola salinan digital yang Anda unggah ke penyimpanan privat.</p><span class="status-pill" id="documentCount">Memuat dokumen…</span></article><article class="dash-card"><span class="dash-icon">◈</span><h2>Keamanan Akun</h2><p>Status email akun Anda.</p><span class="status-pill" id="emailStatus">Memeriksa…</span></article><article class="dash-card"><span class="dash-icon">↻</span><h2>Pemulihan Dokumen</h2><p>Permintaan pemulihan hanya diproses petugas berwenang setelah bencana dan pemeriksaan yang diperlukan.</p><span class="status-pill">Alur petugas</span></article></section><section class="recovery-guide" aria-labelledby="recoveryGuideHeading">
   <div class="guide-intro"><span class="aside-kicker">PANDUAN PEMULIHAN</span><h2 id="recoveryGuideHeading">Pilih cara pemulihan yang paling sesuai</h2><p>Anda tidak perlu mengirim pengajuan pemulihan kantor dari portal ini. Ikuti panduan di bawah untuk pemulihan mandiri atau mendapatkan bantuan langsung dari petugas.</p></div>
   <div class="recovery-options">
-    <article class="recovery-option recovery-option-home"><div class="option-icon" aria-hidden="true">⌂</div><span class="option-label">PILIHAN 01</span><h3>Pemulihan mandiri dari rumah</h3><p>Gunakan portal Docura untuk mengelola salinan dokumen digital yang sudah tersimpan. Ikuti langkah verifikasi yang tersedia dan pastikan informasi akun tetap aman.</p><ol><li>Masuk ke akun Docura Anda.</li><li>Buka bagian <strong>Dokumen Saya</strong> dan pilih dokumen yang diperlukan.</li><li>Ikuti simulasi verifikasi yang ditampilkan untuk alur demonstrasi.</li></ol><div class="option-note">Gunakan hanya akun Anda sendiri. Simulasi biometrik pada demo bukan pemeriksaan identitas nyata.</div></article>
+    <article class="recovery-option recovery-option-home"><div class="option-icon" aria-hidden="true">⌂</div><span class="option-label">PILIHAN 01</span><h3>Pemulihan mandiri dari rumah</h3><p>Gunakan portal Docura untuk mengelola salinan dokumen digital yang sudah tersimpan. Ikuti langkah verifikasi yang tersedia dan pastikan informasi akun tetap aman.</p><ol><li>Masuk ke akun Docura Anda.</li><li>Buka bagian <strong>Dokumen Saya</strong> dan pilih dokumen yang diperlukan.</li><li>Ikuti verifikasi yang tersedia. Untuk demonstrasi, metode biometrik yang ditampilkan masih berupa simulasi.</li></ol><div class="option-note">Gunakan hanya akun Anda sendiri. Simulasi biometrik pada demo bukan pemeriksaan identitas nyata.</div></article>
     <article class="recovery-option recovery-option-office"><div class="option-icon" aria-hidden="true">⌖</div><span class="option-label">PILIHAN 02</span><h3>Pemulihan langsung di kantor</h3><p>Jika Anda membutuhkan bantuan petugas, datang langsung ke kantor layanan pemulihan. Petugas akan membuat kasus dan memandu prosesnya.</p><ol><li>Datang langsung ke kantor layanan pemulihan.</li><li>Siapkan informasi akun dan dokumen pendukung yang tersedia.</li><li>Ikuti pemeriksaan petugas dan tunggu keputusan yang berwenang.</li><li>Jika disetujui, ikuti instruksi QR dan pengambilan dokumen dari petugas.</li></ol><div class="option-note">Tidak perlu membuat pengajuan terlebih dahulu dari dashboard warga.</div></article>
   </div>
 </section>
 
 <section class="documents-panel upload-workspace" aria-labelledby="documentsHeading">
-  <div class="upload-heading"><div><span class="aside-kicker">ARSIP PRIVAT</span><h2 id="documentsHeading">Pusat pengiriman dokumen</h2><p>Tambahkan salinan digital agar dokumen Anda tersimpan rapi dan dapat diakses kembali sesuai alur verifikasi Docura.</p></div><div class="upload-heading-badge"><span>▤</span><strong>Arsip aman</strong><small>PDF · JPG · PNG</small></div></div>
+  <div class="upload-heading"><div><span class="aside-kicker">ARSIP PRIVAT</span><h2 id="documentsHeading">Arsip dokumen pribadi</h2><p>Tambahkan salinan digital agar dokumen Anda tersimpan rapi dan dapat diakses kembali sesuai alur verifikasi Docura.</p></div><div class="upload-heading-badge"><span>▤</span><strong>Arsip aman</strong><small>PDF · JPG · PNG</small></div></div>
   <div class="upload-benefits"><div><span>✓</span><p><strong>Privat secara default</strong><small>File disimpan di bucket privat.</small></p></div><div><span>↥</span><p><strong>Mudah dikelola</strong><small>Unggah dan lihat arsip dari satu tempat.</small></p></div><div><span>10 MB</span><p><strong>Batas per file</strong><small>Format PDF, JPG, atau PNG.</small></p></div></div>
   <form id="uploadForm" class="upload-form upload-form-modern">
     <div class="upload-fields upload-fields-modern"><label>Nama dokumen<input name="title" required minlength="2" maxlength="120" placeholder="Contoh: Akta kelahiran"></label>
@@ -21,6 +23,55 @@
   <div class="document-toolbar"><div><h3>Arsip tersimpan</h3><p>Daftar dokumen yang sudah diunggah ke akun Anda.</p></div><button class="button-quiet" id="refreshDocuments" type="button">↻ Muat ulang</button></div>
   <div id="documentsList" class="documents-list"><p class="muted-text">Memuat daftar dokumen…</p></div>
 </section>
+
+<dialog id="accountSettingsDialog" class="settings-dialog" aria-labelledby="accountSettingsTitle">
+  <div class="settings-card">
+    <button type="button" id="closeAccountSettings" class="fingerprint-close" aria-label="Tutup pengaturan">×</button>
+    <span class="aside-kicker">PREFERENSI & KEAMANAN</span>
+    <h2 id="accountSettingsTitle">Pengaturan akun</h2>
+    <p class="settings-intro">Perubahan sensitif memerlukan kata sandi saat ini. Perubahan email baru aktif setelah konfirmasi email selesai.</p>
+    <div id="settingsMessage" class="form-message" role="status" aria-live="polite"></div>
+
+    <section class="settings-section" aria-labelledby="settingsNameTitle">
+      <h3 id="settingsNameTitle">Informasi akun</h3>
+      <form id="settingsNameForm" class="settings-form">
+        <label>Nama lengkap / nama tampilan<input name="fullName" id="settingsFullName" minlength="2" maxlength="100" required autocomplete="name"></label>
+        <label>Kata sandi saat ini<input name="currentPassword" type="password" required autocomplete="current-password"></label>
+        <button class="auth-submit" type="submit">Simpan nama</button>
+      </form>
+      <form id="settingsEmailForm" class="settings-form">
+        <label>Email akun<input name="email" id="settingsEmail" type="email" required maxlength="254" autocomplete="email"></label>
+        <label>Kata sandi saat ini<input name="currentPassword" type="password" required autocomplete="current-password"></label>
+        <button class="button-secondary" type="submit">Ubah email</button>
+        <small>Supabase dapat meminta konfirmasi pada alamat email baru dan/atau lama sesuai konfigurasi proyek.</small>
+      </form>
+    </section>
+
+    <section class="settings-section" aria-labelledby="settingsPasswordTitle">
+      <h3 id="settingsPasswordTitle">Ubah kata sandi</h3>
+      <form id="settingsPasswordForm" class="settings-form">
+        <label>Kata sandi saat ini<input name="currentPassword" type="password" required autocomplete="current-password"></label>
+        <label>Kata sandi baru<input name="newPassword" type="password" minlength="8" maxlength="72" required autocomplete="new-password"></label>
+        <label>Ulangi kata sandi baru<input name="confirmPassword" type="password" minlength="8" maxlength="72" required autocomplete="new-password"></label>
+        <small>Gunakan minimal 8 karakter. Jangan gunakan kata sandi yang sama dengan akun lain.</small>
+        <button class="auth-submit" type="submit">Perbarui kata sandi</button>
+      </form>
+    </section>
+
+    <section class="settings-section" aria-labelledby="settingsPasskeyTitle">
+      <h3 id="settingsPasskeyTitle">Passkey perangkat</h3>
+      <p>Tambahkan passkey baru sebelum menghapus passkey lama. Jika satu passkey gagal, Anda dapat mencoba autentikator lain yang terdaftar.</p>
+      <form id="settingsPasskeyForm" class="settings-form">
+        <label>Nama perangkat (agar mudah dikenali)<input id="settingsPasskeyLabel" name="deviceLabel" maxlength="80" placeholder="Contoh: HP sidik jari atau Laptop PIN"></label>
+        <label>Kata sandi akun<input id="settingsPasskeyPassword" name="currentPassword" type="password" required autocomplete="current-password"></label>
+        <button type="submit" id="settingsRegisterPasskeyButton" class="auth-submit">＋ Daftarkan passkey</button>
+      </form>
+      <div id="passkeyList" class="passkey-list"></div>
+      <small>Penghapusan di sini menghapus kredensial dari akun Docura. Anda mungkin juga perlu menghapus salinannya di Microsoft Password Manager atau perangkat.</small>
+    </section>
+    <div class="settings-footer"><button type="button" id="closeAccountSettingsFooter" class="button-secondary">Selesai</button></div>
+  </div>
+</dialog>
 
 <dialog id="fingerprintDialog" class="fingerprint-dialog" aria-labelledby="fingerprintTitle" aria-describedby="fingerprintDescription">
   <div class="fingerprint-modal-card">

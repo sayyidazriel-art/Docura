@@ -18,3 +18,77 @@
 .emergency-modal-heading h2{margin-top:4px}
 .modal-close[hidden]{display:none!important}
 @media(max-width:600px){.emergency-work-panel>.panel-head{flex-direction:column}}
+/* V2.4: fingerprint-style visual for demo-only biometric animation. */
+.fingerprint-scan-visual{border:1px solid #355c92;background:radial-gradient(circle at center,#244b7e 0,#0c2446 72%)}
+.officer-fingerprint{width:116px;height:116px;color:#9dc7ff;filter:drop-shadow(0 0 8px #8bd9ff45)}
+.fingerprint-scan-visual .face-scan-line{z-index:2}
+.recovery-document-choice{cursor:pointer;align-items:center}
+.recovery-document-choice input[type=checkbox]{width:18px;height:18px;flex-shrink:0;accent-color:var(--blue)}
+.recovery-document-choice .case-row-main strong{font-size:13px}
+
+/* V2.6.1: polished local WebAuthn fingerprint representation. */
+.biometric-modal-head{display:flex;align-items:center;gap:14px;margin:0 34px 16px 0}
+.biometric-icon{display:grid;place-items:center;width:54px;height:54px;flex:0 0 54px;border:1px solid #9fc1ff55;border-radius:16px;background:linear-gradient(145deg,#eaf2ff,#d8e7ff);color:#2457ad}
+.biometric-icon .officer-fingerprint{width:42px;height:42px;color:#2457ad;filter:none}
+.biometric-kicker{display:block;color:var(--blue);font-size:9px;font-weight:900;letter-spacing:1.25px;margin-bottom:4px}
+.biometric-modal-head h2{margin:0 0 3px!important;font-size:20px!important}
+.biometric-modal-head p{margin:0;font-size:11px}
+.biometric-card{padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--bg);margin:14px 0}
+.biometric-visual{height:190px;margin:0;border-radius:12px;isolation:isolate}
+.biometric-visual>.officer-fingerprint{width:100px;height:100px;z-index:1;transition:transform .3s,filter .3s}
+.fingerprint-orbit{position:absolute;width:132px;height:132px;border:1px solid #8dbbff55;border-radius:50%;box-shadow:0 0 0 12px #8dbbff0a,0 0 0 25px #8dbbff08;z-index:0}
+.biometric-visual.scanning .officer-fingerprint{transform:scale(1.04);filter:drop-shadow(0 0 12px #8bd9ff95)}
+.biometric-visual.is-success{background:radial-gradient(circle at center,#17624f 0,#0c2446 76%);border-color:#4bc99d}
+.biometric-visual.is-success .officer-fingerprint{color:#8af0c6;filter:drop-shadow(0 0 12px #67e6b3a0)}
+.biometric-visual.is-failed{background:radial-gradient(circle at center,#733a48 0,#0c2446 76%);border-color:#ef9aa5}
+.biometric-visual.is-failed .officer-fingerprint{color:#ffb3bd;filter:drop-shadow(0 0 12px #ff8897a0)}
+.biometric-status-row{display:flex;align-items:flex-start;gap:9px;padding:9px 2px 0}
+.biometric-status-row p{margin:0;font-size:11px;line-height:1.55}
+.biometric-status-dot{width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:#9aa8bb;box-shadow:0 0 0 4px #9aa8bb20}
+.biometric-status-dot.is-pending{background:#e5ad42;box-shadow:0 0 0 4px #e5ad4225;animation:biometric-pulse 1.2s infinite}
+.biometric-status-dot.is-success{background:#22a879;box-shadow:0 0 0 4px #22a87925}
+.biometric-status-dot.is-failed{background:#d84f60;box-shadow:0 0 0 4px #d84f6025}
+.biometric-progress{margin:10px 2px 1px}
+.biometric-progress span{transition:width .35s ease}
+.biometric-explainer{padding:12px 14px;border:1px solid var(--border);border-radius:11px;margin:12px 0;background:var(--surface)}
+.biometric-explainer strong{font-size:11px}
+.biometric-explainer p{margin:4px 0 0;font-size:11px;line-height:1.6}
+@keyframes biometric-pulse{50%{box-shadow:0 0 0 7px #e5ad420d}}
+@media(max-width:600px){.modal{padding:19px}.biometric-modal-head{align-items:flex-start}.biometric-icon{width:46px;height:46px;flex-basis:46px}.biometric-visual{height:170px}}
+
+/* Docura V2.7.0 — staff administration and notification UI */
+.notification-trigger{position:relative;display:grid;place-items:center;min-width:36px;height:36px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font-size:18px}
+.notification-trigger b{position:absolute;right:-6px;top:-7px;min-width:18px;height:18px;padding:0 4px;display:grid;place-items:center;border-radius:20px;background:#d84f60;color:white;font-size:10px;border:2px solid var(--surface)}
+.notification-trigger b[hidden],.nav-item b[hidden]{display:none}
+.staff-create-panel{margin-bottom:18px}.staff-form .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.staff-form .form-group{min-width:0}.staff-form .form-label{display:block;font-size:12px;font-weight:750;margin:10px 0 6px}.staff-form .form-input{width:100%;min-width:0;border:1px solid var(--border);border-radius:9px;padding:11px 12px;background:var(--surface);color:var(--text)}.field-hint{display:block;color:var(--muted);font-size:10px;line-height:1.5;margin-top:5px}.form-actions{display:flex;justify-content:flex-end;margin-top:16px}.notification-list{display:grid;gap:10px}.notification-row{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}.notification-row.is-unread{background:var(--blue2);border-color:color-mix(in srgb,var(--blue) 25%,var(--border))}.notification-mark{width:28px;height:28px;display:grid;place-items:center;flex:0 0 28px;border-radius:9px;background:var(--blue2);color:var(--blue);font-size:11px}.notification-row.is-read .notification-mark{background:var(--greenbg);color:var(--green)}.notification-copy{min-width:0;flex:1}.notification-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.notification-heading strong{font-size:13px}.notification-heading small,.notification-copy>small{color:var(--muted);font-size:10px;white-space:nowrap}.notification-copy p{font-size:12px;line-height:1.6;color:var(--muted);margin:5px 0}.notification-row>.small-btn{flex-shrink:0}
+@media(max-width:850px){.staff-form .form-grid{grid-template-columns:1fr}.notification-heading{display:block}.notification-heading small{display:block;margin-top:4px}.notification-row{flex-wrap:wrap}.notification-row>.small-btn{margin-left:40px}.top-actions{gap:8px}.notification-trigger{min-width:32px;height:32px}}
+
+
+/* V2.9.0 — operational analytics, accessibility and language controls */
+.accessibility-tools{display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.language-select,.access-btn{min-height:30px;border:0;border-radius:7px;background:transparent;color:var(--text);font:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:5px 7px}
+.language-select{border:1px solid var(--border);background:var(--bg);max-width:58px}
+.access-btn:hover,.language-select:focus-visible{background:var(--blue2);outline:2px solid var(--blue);outline-offset:1px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+html{font-size:calc(16px * var(--access-scale,1))}
+.analytics-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px;flex-wrap:wrap}
+.analytics-secondary-grid{margin-top:12px}
+.analytics-grid{margin-top:18px}
+.analytics-bars{display:grid;gap:14px;padding-top:8px}
+.analytics-bar-row>div:first-child{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:7px}
+.analytics-bar-row strong{font-variant-numeric:tabular-nums}
+.analytics-track{height:9px;background:var(--bg);border:1px solid var(--border);border-radius:99px;overflow:hidden}
+.analytics-track span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#57a4ff);border-radius:99px;min-width:3px}
+.month-chart{height:220px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:end;padding:12px 4px 0}
+.month-bar{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
+.month-bar-value{font-size:11px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.month-bar-track{height:155px;width:min(34px,75%);display:flex;align-items:flex-end;background:var(--bg);border:1px solid var(--border);border-radius:8px 8px 4px 4px;overflow:hidden}
+.month-bar-track span{display:block;width:100%;min-height:3px;background:linear-gradient(180deg,#58a5ff,var(--blue));border-radius:7px 7px 2px 2px}
+.month-bar small{font-size:10px;color:var(--muted)}
+.analytics-footnote{font-size:11px;line-height:1.6;color:var(--muted);margin:14px 0 0}
+html[data-contrast="high"]{--text:#050b18;--muted:#26364d;--bg:#fff;--surface:#fff;--border:#34445c;--line:#34445c;--blue:#003db8;--blue2:#e5efff;--shadow:0 0 0 2px #34445c}
+html[data-theme="dark"][data-contrast="high"]{--text:#fff;--muted:#e0e8f5;--bg:#050a14;--surface:#0b1423;--border:#d9e4f7;--line:#d9e4f7;--blue:#8bb9ff;--blue2:#172c4b}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+@media(max-width:1120px){.accessibility-tools{gap:2px}.language-select,.access-btn{padding:5px}}
+@media(max-width:760px){.top-actions{flex-wrap:wrap;justify-content:flex-end}.accessibility-tools{order:3}.analytics-toolbar{align-items:flex-start}.month-chart{gap:7px}}
+@media(max-width:420px){.accessibility-tools{width:auto}.language-select{max-width:48px}.access-btn{font-size:10px;padding:4px}.analytics-grid .panel{min-width:0}.month-chart{gap:4px;padding-left:0;padding-right:0}.month-bar-track{width:70%}}

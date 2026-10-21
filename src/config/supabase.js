@@ -2,6 +2,7 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error("SUPABASE_URL dan SUPABASE_ANON_KEY harus diatur di file .env");
@@ -28,4 +29,9 @@ function createAuthClient(accessToken = "") {
   return createClient(supabaseUrl, supabaseKey, options);
 }
 
-module.exports = { supabase, createAuthClient };
+function createServiceClient() {
+  if (!serviceRoleKey) throw new Error('SUPABASE_SERVICE_ROLE_KEY wajib dikonfigurasi di environment server untuk operasi WebAuthn. Jangan pernah mengirimnya ke browser.');
+  return createClient(supabaseUrl, serviceRoleKey, clientOptions);
+}
+
+module.exports = { supabase, createAuthClient, createServiceClient };

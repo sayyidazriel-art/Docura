@@ -1,43 +1,50 @@
-# Database / Supabase setup
+# Database — Supabase
 
-Docura Stage 9 uses Supabase Auth, Postgres, and private Supabase Storage. SQL is required: cloning the repository alone does not create the database schema or Storage policies.
+Docura V2.9.0 menggunakan Supabase Auth, PostgreSQL, dan Supabase Storage privat.
 
-## Recommended for a fresh demo project
+## Satu file SQL
 
-1. Create a dedicated Supabase project for Docura.
-2. Open **SQL Editor** in that project.
-3. Open `database/install-all.sql` from this repository, copy the entire file into SQL Editor, and run it once.
-4. Review the output for errors. If any statement fails, stop and resolve it rather than assuming the installation completed.
-5. The script creates the document metadata table, private `citizen-documents` bucket, role registry, audit table, case-management tables/functions, RLS policies, and Stage 9 hardening. It also seeds three synthetic sample cases only if the case table is empty.
-6. Continue with the root `README.md` to configure `.env`, create demo accounts, assign roles, and start the app.
+Semua SQL yang diperlukan untuk instalasi baru sudah digabung menjadi satu file:
 
-## Existing Supabase project
+**[`install-all.sql`](install-all.sql)**
 
-Do not blindly run the all-in-one file against a database that already contains Docura/RefugeeLedger tables or real data. Back up first, compare migration history, and apply only missing migrations in this order:
+File tersebut menggabungkan skema dan kebijakan database dari tahap penyimpanan dokumen, role dan audit, pengelolaan kasus, hardening sebelumnya, notifikasi/manajemen petugas V2.7.0, serta penghapusan role Perwakilan V2.8.0. V2.9.0 tidak menambahkan migrasi SQL baru.
 
-1. `stage5-document-storage.sql`
-2. `stage7b-officer-roles.sql`
-3. `stage7d-case-management.sql`
-4. `stage8a-normal-multicase-popup-fix.sql`
-5. `stage8b-citizen-recovery-guidance-qr-persistence.sql`
-6. `stage9-security-hardening.sql`
+### Instalasi proyek baru
 
-Do not apply an earlier migration over a newer schema without reviewing the differences. The migrations are not a substitute for a database backup.
+1. Buat proyek Supabase khusus untuk demo Docura.
+2. Buka **Supabase Dashboard → SQL Editor**.
+3. Salin seluruh isi `database/install-all.sql` dan jalankan **satu kali**.
+4. Periksa hasilnya dan pastikan tidak ada error.
+5. Lanjutkan konfigurasi `.env` dan aplikasi sesuai README utama.
 
-## Create a staff account
+Skrip ini ditujukan untuk proyek Supabase baru/kosong. Jangan jalankan ulang pada database yang sudah digunakan atau berisi data penting. Untuk database existing, backup dahulu dan tinjau migrasi yang sudah diterapkan; skrip all-in-one bukan alat upgrade otomatis.
 
-Create the user in **Supabase Dashboard → Authentication → Users → Add user**. Copy the user's UUID, then run a query like this in SQL Editor (replace the placeholders):
+## Membuat role awal
+
+Untuk membuat akun Admin pertama pada proyek demo:
+
+1. Buat pengguna melalui **Supabase Dashboard → Authentication → Users → Add user**.
+2. Salin UUID pengguna tersebut.
+3. Jalankan query berikut dengan UUID dan nama yang sesuai:
 
 ```sql
 insert into public.refugeeledger_user_roles (user_id, role_code, display_name, is_active)
-values ('REPLACE-WITH-AUTH-USER-UUID', 'recovery_officer', 'Demo Recovery Officer', true);
+values ('REPLACE-WITH-AUTH-USER-UUID', 'admin', 'Docura Admin', true);
 ```
 
-Valid `role_code` values: `admin`, `recovery_officer`, `document_printer`, `supervisor`, `citizen`. Assign privileged roles only to trusted accounts. Public registration must not grant staff privileges.
+Akun warga sebaiknya menggunakan registrasi mandiri. Akun petugas selanjutnya dibuat melalui menu Manajemen Petugas oleh Admin. Jangan memberikan role istimewa melalui registrasi publik.
 
-To see the account UUIDs, use Authentication → Users. Do not use an email address in place of the UUID.
+Role yang didukung:
+- `admin`
+- `citizen`
+- `recovery_officer`
+- `supervisor`
+- `document_printer`
 
-## Useful verification queries
+Role `representative` sudah dihentikan dan tidak termasuk dalam role yang didukung.
+
+## Query pemeriksaan opsional
 
 ```sql
 select user_id, role_code, display_name, is_active
@@ -53,10 +60,10 @@ from storage.buckets
 where id = 'citizen-documents';
 ```
 
-## Important notes
+## Catatan penting
 
-- Keep `citizen-documents` private. Do not switch it to a public bucket.
-- Do not put Supabase secret/service-role keys in `.env` used by this app, browser code, GitHub, screenshots, or chat. The current server uses the publishable/anon key plus user access tokens; RLS must remain enabled.
-- Use synthetic documents and accounts for public demos.
-- Fingerprint/face checks are simulations in this version; blockchain and ZKP are not implemented in this version.
-- The SQL is designed for the current Stage 9 prototype and has not been independently tested against every Supabase project configuration. Validate it in a new demo project first.
+- Bucket `citizen-documents` harus tetap privat.
+- Pastikan RLS aktif dan jangan menambahkan policy publik yang membuka dokumen atau data kasus.
+- `SUPABASE_SERVICE_ROLE_KEY` hanya untuk server dan tidak boleh ditaruh di frontend atau repository publik.
+- Gunakan data sintetis untuk demo.
+- Perubahan SQL yang digabung tidak membuktikan bahwa database sudah diterapkan pada proyek Supabase tertentu; verifikasi hasil eksekusi di proyek demo.
